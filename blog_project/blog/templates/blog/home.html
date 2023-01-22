@@ -1,0 +1,30 @@
+{% extends 'blog/base.html' %}
+
+
+{% block content %}
+{% for message in messages %}
+<div class="container-fluid p-0">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="True">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
+    <a href="{% url 'blog:blog_list' %}">View All Blog</a>
+    <br>
+    {% comment %} <a></a>
+    <a></a>
+    <a></a> {% endcomment %}
+    
+    {% if user.is_login %}
+        <h1>{{user.username}}</h1>
+        <a href="{% url 'blog:blog_add' user.username %}">ADD New Post</a><br>
+        <a href="{% url 'blog:logout' user.username %}">Logout</a><hr>
+    {% else %}
+    <a href="{% url 'blog:signup' %}">Signup</a><br><hr>
+    <a href="{% url 'blog:login' %}">login</a>
+    {% endif %}
+{% endblock content %}
+    

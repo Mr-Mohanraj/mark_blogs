@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+
+
+{% block content %}
+    <form method='post'>
+        {% csrf_token %}
+        <label>Title:
+            <textarea name='title' cols=100 rows=10>{{ post.title }}</textarea><br>
+            <label>
+        <label>Body :
+            <textarea name='body' cols=100 rows=10>{{ post.body }}</textarea><br>
+        </label><br>
+        <hr>
+        <button type="submit">Update</button>
+    <form>
+{% endblock content %}

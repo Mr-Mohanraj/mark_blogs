@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+
+
+{% block content %}
+    {{post.title}}
+    {{post.body}}
+    {{post.author}}<br>
+    <a href="{% url 'blog:blog_delete' post.id %}">Delete</a><br>
+    {% comment %} <a href="{% url 'blog:blog_update' post.id %}">Update</a><br> {% endcomment %}
+    <a href="{% url 'blog:blog_list' %}">List view</a><br>
+    <a href="{% url 'blog:blog_edit' post.id %}">Edit post</a>
+{% endblock content %}
+    

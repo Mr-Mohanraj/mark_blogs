@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+
+
+{% block content %}
+<form method='post'>
+    {% csrf_token %}
+    <label>Username :
+        <input  name='username'><br>
+    </label><br>
+    <label>Password:
+        <input  type='password' name='password'><br>
+    </label><br>
+    <button type="submit">Signup</button>
+<form>
+{% endblock content %}
+    
