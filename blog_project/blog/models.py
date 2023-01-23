@@ -8,6 +8,8 @@ class User(AbstractUser):
     total_post = models.PositiveIntegerField(default=0)
     is_login = models.BooleanField(default=False)
 
+    def get_post_count(self):
+        return self.total_post
 
 
 class Post(models.Model):
@@ -16,5 +18,3 @@ class Post(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, models.CASCADE)
-
-

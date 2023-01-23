@@ -12,19 +12,13 @@
     </div>
 </div>
 {% endfor %}
-    <a href="{% url 'blog:blog_list' %}">View All Blog</a>
-    <br>
-    {% comment %} <a></a>
-    <a></a>
-    <a></a> {% endcomment %}
-    
-    {% if user.is_login %}
+    {% comment %} {% if user.is_login %}
         <h1>{{user.username}}</h1>
         <a href="{% url 'blog:blog_add' user.username %}">ADD New Post</a><br>
         <a href="{% url 'blog:logout' user.username %}">Logout</a><hr>
+        <a href="{% url 'blog:user_blog' user.id %}">View All Blog {{user.username}}</a>
     {% else %}
-    <a href="{% url 'blog:signup' %}">Signup</a><br><hr>
-    <a href="{% url 'blog:login' %}">login</a>
-    {% endif %}
+        <a href="{% url 'blog:signup' %}">Signup</a><br><hr>
+        <a href="{% url 'blog:login' %}">login</a>
+    {% endif %} {% endcomment %}
 {% endblock content %}
-    
