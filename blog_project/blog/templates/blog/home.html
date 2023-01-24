@@ -12,13 +12,16 @@
     </div>
 </div>
 {% endfor %}
-    {% comment %} {% if user.is_login %}
-        <h1>{{user.username}}</h1>
-        <a href="{% url 'blog:blog_add' user.username %}">ADD New Post</a><br>
-        <a href="{% url 'blog:logout' user.username %}">Logout</a><hr>
-        <a href="{% url 'blog:user_blog' user.id %}">View All Blog {{user.username}}</a>
+    {% if user.is_login %}
+        <div class="container-fluid m-auto py-3">
+            <h1 class="btn bg-info m-auto">{{user.username}}</h1><br><br>
+            <a class="btn bg-success m-auto" href="{% url 'blog:blog_add' user.username %}">ADD New Post</a><br><br>
+            <a class="btn bg-success m-auto" href="{% url 'blog:user_blog' user.id %}">View All Blog {{user.username}}</a><br><br>
+            <a class="btn bg-danger m-auto py-1" href="{% url 'blog:logout' user.username %}">Logout</a><br><br>
+        </div>
     {% else %}
-        <a href="{% url 'blog:signup' %}">Signup</a><br><hr>
-        <a href="{% url 'blog:login' %}">login</a>
-    {% endif %} {% endcomment %}
+        <a class="btn btn-info" href="{% url 'blog:signup' %}">Signup</a><br><hr>
+        <a class="btn btn-success" href="{% url 'blog:login' %}">login</a><br>
+        {% comment %} <a class="btn bg-success m-auto" href="{% url 'blog:user_blog' user.id %}">View All Blog {{user.username}}</a><br><br> {% endcomment %}
+    {% endif %}
 {% endblock content %}

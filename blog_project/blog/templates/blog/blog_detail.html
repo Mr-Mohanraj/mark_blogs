@@ -2,12 +2,20 @@
 
 
 {% block content %}
-    {{post.title}}
-    {{post.body}}
-    {{post.author}}<br>
-    <a href="{% url 'blog:blog_delete' post.id %}">Delete</a><br>
-    {% comment %} <a href="{% url 'blog:blog_update' post.id %}">Update</a><br> {% endcomment %}
-    <a href="{% url 'blog:blog_list' %}">List view</a><br>
-    <a href="{% url 'blog:blog_edit' post.id %}">Edit post</a>
+<div class='container-fluid pr-5  mr-5 border-info' style="background-color:#89edf2;">
+    <a class="text-decoration-none" href="{% url 'blog:blog_detail' user.id %}">
+    <div class="text-start">
+        <p class="text-wrap"><mark>{{post.title}}<mark></p>
+        <p class='bg-info text-sm-end'> Author Name <mark>{{post.author}}</mark> Create at {{post.create_at}}<p>
+        <p class="text-bg-secondary text-info text-black"> {{post.body}}</p><br>
+        <hr>
+    </div>
+    </a>
+</div>
+<div class="container-fluid  btn btn-group">
+    <a class="btn btn-warning " href="{% url 'blog:blog_edit' post.id %}">Edit post</a>
+    <a class="btn btn-info" href="{% url 'blog:blog_list' %}">List view</a><br>
+    <a class="btn btn-danger" href="{% url 'blog:blog_delete' post.id %}">Delete</a><br>
+</div>
 {% endblock content %}
     

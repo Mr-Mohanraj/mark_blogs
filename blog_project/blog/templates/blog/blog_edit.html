@@ -2,7 +2,7 @@
 
 
 {% block content %}
-    <form method='post'>
+    <form action="{% url 'blog:blog_detail' user.id%}"method='post'>
         {% csrf_token %}
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Blog Title</label>

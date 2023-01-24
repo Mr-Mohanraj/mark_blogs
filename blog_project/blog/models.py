@@ -18,3 +18,6 @@ class Post(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, models.CASCADE)
+    
+    class Meta:
+        ordering = ["-create_at"]

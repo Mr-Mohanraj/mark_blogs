@@ -2,12 +2,18 @@
 
 
 {% block content %}
-    <a href="{% url 'blog:home' %}">Home</a><br><br><hr>
+    {% comment %} <a href="{% url 'blog:home' %}">Home</a><br><br><hr> {% endcomment %}
     {% for blog in posts  %}
-        <a href="{% url 'blog:blog_detail' blog.id %}">{{blog.title}}</a><br>
-        {{blog.body}}<br>
-        {{blog.author}}<br>
-        <hr><hr>
+    <div class='container pr-5  mr-5 border-info' style="background-color:#89edf2;">
+        <a class="text-decoration-none" href="{% url 'blog:blog_detail' blog.id %}">
+        <div class="">
+            <p class="container-fluid text-wrap "><mark>{{blog.title}}<mark></p>
+            <p class='container-fluid bg-info '> Author Name <mark>{{blog.author}}</mark> Create at {{blog.create_at}}<p>
+            <p class="text-bg-secondary text-info text-black"> {{blog.body}}</p><br>
+            <hr>
+        </div>
+        </a>
+    </div>
     {% endfor %}
 
 {% endblock content %}

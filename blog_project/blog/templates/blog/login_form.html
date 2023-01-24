@@ -2,15 +2,16 @@
 
 
 {% block content %}
-<form method='post'>
-    {% csrf_token %}
-    <label>Username :
-        <input  name='username'><br>
-    </label><br>
-    <label>Password:
-        <input  type='password' name='password'><br>
-    </label><br>
-    <button type="submit">Signup</button>
-<form>
+    <form  method='post' >
+        {% csrf_token %}
+        <div class="mb-3 mt-3">
+          <label for="uname" class="form-label">Username:</label>
+          <input type="text" class="form-control" id="uname" placeholder="Enter username" name="username" required>
+        </div>
+        <div class="mb-3">
+          <label for="pwd" class="form-label">Password:</label>
+          <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password" required>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
 {% endblock content %}
     

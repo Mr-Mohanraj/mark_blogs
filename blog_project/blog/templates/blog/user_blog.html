@@ -2,7 +2,7 @@
 
 
 {% block content %}
-    <a href="{% url 'blog:home' %}">Home</a><br><br><hr>
+    {% comment %} <a href="{% url 'blog:home' %}">Home</a><br><br><hr> {% endcomment %}
     {% for blog in posts  %}
         <a href="{% url 'blog:blog_detail' blog.id %}">{{blog.title}}</a><br>
         {{blog.body}}<br>
