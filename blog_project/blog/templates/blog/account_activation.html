@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+
+
+{% block content %}
+    {%if user.is_login%}
+    <p>active successfully go and login now </p>
+    <a class="btn btn-success" href="{% url 'blog:login' %}">Login</a>
+    {%else%}
+    <p>activation code send to your email check {{user.email}}</p>
+    {% endif %}
+{% endblock content %}
+    

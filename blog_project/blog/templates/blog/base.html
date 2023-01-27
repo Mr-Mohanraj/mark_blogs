@@ -11,12 +11,30 @@
     <title>Django Blog</title>
     <style>
       body{
-        background-color:#d1d4a7;
-      }    
+        background-color:#f1f77d;
+      }
+      .post_title{
+        color:black;
+        padding-right:30px;
+      }
+      .navbar{
+        background-color:#f6bbf9;
+        color:#bd7732;
+      }
+      .navbar-toggler{
+        background-color:#bd7732 !important;
+      }
+      .body_post{
+        background-color:#bd7732;
+        color:black;
+      }
+      .post_div{
+        background-color:#bd7732;
+      }
     </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand bg-dark-50 sticky-top">
+    <nav class="navbar navbar-expand-lg sticky-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'blog:home' %}">Django Blog</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +59,8 @@
                 <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="#">Account</a></li>
                   <li><a class="dropdown-item" href="{% url 'blog:user_blog' user.id %}">blogs</a></li>
-                  <li><a class="dropdown-item" href="#">Password Change</a></li>
+                  <li><a class="dropdown-item" href="{% url 'blog:password_change' user.username%}">Password Change</a></li>
+                  <li><a class="dropdown-item" href="{% url 'blog:password_forgot' user.username%}">Forgot password</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item"  href="{% url 'blog:logout' user.username %}">Logout</a><li>
                 </ul>
@@ -54,9 +73,6 @@
                 <a class="nav-link active" aria-current="page" href="{% url 'blog:signup' %}">Signup</a>
               </li>
               {% endif %}
-              {% comment %} <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-              </li> {% endcomment %}
             </ul>
             <form class="d-flex">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -69,7 +85,6 @@
     {% block content %}
         
     {% endblock content %}
-        
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

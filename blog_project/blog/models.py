@@ -21,3 +21,7 @@ class Post(models.Model):
     
     class Meta:
         ordering = ["-create_at"]
+
+class Token(models.Model):
+    activation_token = models.CharField(max_length=64)
+    reset_token = models.CharField(max_length=64)

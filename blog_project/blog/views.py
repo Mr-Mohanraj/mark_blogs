@@ -4,8 +4,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.urls import reverse
-
+from django.core.mail import send_mail
 from django.http import HttpResponse
+from django.http.response import Http404
+import jwt
 
 
 def home(request):
@@ -33,7 +35,7 @@ def blog_list(request):
 def blog_detail(request, pk):
     try:
         post = Post.objects.get(pk=pk)
-        user = get_object_or_404(User, pk=post.author.id)
+        user = get_object_or_404(User, pk=pk)
     except ObjectDoesNotExist:
         return render(request, 'blog/404.html', {"error": ObjectDoesNotExist})
     
@@ -101,16 +103,20 @@ def signup_user(request):
         if (password and password_confirm) and password == password_confirm:
             password = password
 
-        user = User.objects.create_user(
-            username=username, email=email, password=password)
-        if User.objects.filter(username=username).first() == username:
-            messages.error(request, "Username is already taken.")
+        # user = User.objects.create(
+        #     username=username, email=email, password=password)
+        
+        # if User.objects.filter(username=username).first() == username:
+        #     messages.error(request, "Username is already taken.")
+        #     return redirect("blog:signup")
 
-        if User.objects.filter(email=email).first() == email:
-            messages.error(request, "Email id already taken")
+        # if User.objects.filter(email=email).first() == email:
+        #     messages.error(request, "Email id already taken")
+        #     return redirect("blog:signup")
 
-        user.save()
-        return render(request, 'blog/login_form.html', {"user": user})
+        # user.save()
+        send_activation_code(username)
+        return render(request, 'blog/account_activation.html', {"user":True})
     else:
         return render(request, 'blog/signup_form.html')
 
@@ -152,9 +158,13 @@ def logout_user(request, username):
 
 
 def user_blog(request, user_id):
-    posts = get_list_or_404(Post, author=user_id)
     user = get_object_or_404(User, id=user_id)
-    return render(request, 'blog/blog_list.html', {"posts": posts, "user":user})
+    try:
+        posts = get_list_or_404(Post, author=user_id)
+        return render(request, 'blog/blog_list.html', {"posts": posts, "user":user})
+    except Http404:
+        messages.error(request, "There is no blog now add it")
+        return render(request, 'blog/home.html',{"user":user})
 
 
 def upload_blog(request, user_id):
@@ -164,6 +174,94 @@ def upload_blog(request, user_id):
     post.title = title
     post.body = body
     post.save()
+
+def password_change(request, username):
+    username = generate_token(token=username,key="mohanraj", mode='decode')
+    user = get_object_or_404(User, username=username['username'])
+    if request.method == 'POST':
+        old_password = request.POST['old_password']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        if user.check_password(old_password):
+            if password1 == password2:
+                user.set_password(password1)
+                user.save()
+                messages.success(request,  "Password change successfully" )
+            else:
+                messages.error(request, "Password are not match" )
+        else:
+            messages.error(request, "Password are not match" )
+        return redirect('blog:login')
+        # return render(request, 'blog/password_change.html', {"user":user,"msg":msg})
+    else:
+        return render(request, 'blog/password_change.html', {"user":user})
+
+# def password_reset(request, username):
+    
+#     msg = ""
+#     return render(request, 'blog/password_reset.html', {'msg':msg})
+
+def generate_token(key, mode ,hide_data:dict = "",token="",):
+    """mode: 'encode' for encode the values
+            'decode' for decode the values
+        key: 'secure key for encoding and decode'
+        hide_data: what data you want to encode
+        token: the encode the data
+        """
+    if mode == 'encode':
+        encoded_data = jwt.encode(hide_data, key, algorithm="HS256")
+        return encoded_data
+    elif mode == 'decode':
+        decoded_data = jwt.decode(token, key, algorithms=['HS256'])
+        return decoded_data
+
+
+
+def password_forgot(request, username):
+    user = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        email = request.POST['email']
+        # send_mail(subject, message, from_email, recipient_list,\
+        #     fail_silently=False, auth_user=None, auth_password=None, connection=None, html_message=None)
+        token = generate_token({'username':username},key="mohanraj",mode='encode')
+        send_mail(
+            'Your password change token',
+            f"Click the link to verified to change your password {username} http://localhost:8080/password/{token}/change/",
+            'mohanraj@markblogs.com',
+            [email],
+            fail_silently=False,
+            )
+        messages.success(request,"SEND forgot email link to your email %s", email)
+        print("decode value",generate_token(token=token,key="mohanraj",mode='decode'))
+        return redirect('blog:home')
+        # return render(request, 'blog/account_activation.html', {"user":user,'msg':msg})
+    else:
+        return render(request, 'blog/password_forgot.html')
+
+    # return HttpResponse("<p>Password rest view</p>")
+
+def send_activation_code(username):
+    encode_data = generate_token(hide_data={"username":username}, key="activation key", mode='encode')
+    send_mail(
+        "For your activate account in mark_blogs",
+        "activation click the link :" f"http://localhost:8080/user/{encode_data}/activation/",
+        "mohanraj@markblogs.com",
+        ["someone@gmail.com"],
+        fail_silently=True
+    )
+    print(encode_data)
+
+def activation(request, username):
+    print('begging')
+    send_activation_code(username)
+    user = generate_token(key="activation key", mode='decode', token=username)['username']
+    print(user)
+    if User.objects.filter(username=user).exists():
+        return login_user(request)
+    else:
+        return render(request, 'blog/account_activation.html')
+
+
 
 # def blog_update(request, pk):
 #     if request.method == 'POST':

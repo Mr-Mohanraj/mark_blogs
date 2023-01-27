@@ -1,7 +1,7 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<form action="{% url 'blog:home' %}" method='post' > 
+<form method='post' > 
     {% csrf_token %}
     <div class="mb-3 mt-3">
         <label for="uname" class="form-label">Username:</label>
