@@ -2,12 +2,10 @@ from django.shortcuts import render, redirect, get_list_or_404, get_object_or_40
 from .models import Post, User
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout
-from django.urls import reverse
+from django.contrib.auth import login, logout
 from django.core.mail import send_mail
-from django.http import HttpResponse
 from django.http.response import Http404
-import jwt, markdown
+import jwt
 
 
 def home(request):
@@ -49,26 +47,9 @@ def blog_list(request):
         return render(request, 'blog/blog_list.html', {"posts": post})
     '''
 
-def markdown_html(string):
-    html_file = ""
-    return html_file
-
-def string_creater(post:Post):
-    markdown_string = """
-    # Title: **{post.title}**
-    # Author: **{post.author.username}**
-    {post.body}[Author](http:localhost:8000/)
-    """
-    html_string = markdown.markdown(markdown_string)
-    # 3
-    with open('sample.html', 'w') as f:
-        f.write(html_string)
-
 
 def blog_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    string_creater(post)
-    
     return render(request, 'blog/blog_detail.html', {"post": post})
 
     '''
@@ -282,7 +263,8 @@ def password_change(request, username):
                 user.set_password(password1)
                 user.save()
                 logout(request)
-                messages.success(request,  "Password change successfully, please login again")
+                messages.success(
+                    request,  "Password change successfully, please login again")
                 return redirect('blog:login')
             else:
                 messages.error(request, "Password are not match")
@@ -314,7 +296,7 @@ def generate_token(key, mode, hide_data: dict = "", token="",):
 def password_forgot(request, username):
     if request.method == 'POST':
         email = request.POST['email']
-        token = generate_token(key="mohanraj",hide_data={'username': username},
+        token = generate_token(key="mohanraj", hide_data={'username': username},
                                mode='encode')
         send_mail(
             'Your password change token',
@@ -327,7 +309,8 @@ def password_forgot(request, username):
             request, f"SEND forgot email link to your {email}")
         return redirect('blog:home')
     else:
-        return render(request, 'blog/password_forgot.html', {"password_forgot":True})
+        return render(request, 'blog/password_forgot.html', {"password_forgot": True})
+
 
 def forgot_password_change(request, token):
     username = generate_token(token=token, key="mohanraj", mode='decode')
@@ -339,7 +322,8 @@ def forgot_password_change(request, token):
             user.set_password(password1)
             user.save()
             logout(request)
-            messages.success(request,  "Password change successfully, please login again")
+            messages.success(
+                request,  "Password change successfully, please login again")
             return redirect('blog:login')
         else:
             messages.error(request, "Password are does not match")

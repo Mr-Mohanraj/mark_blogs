@@ -1,7 +1,7 @@
-from django.urls import path 
+from django.urls import path
 from . import views
 
-app_name='blog'
+app_name = 'blog'
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -14,11 +14,15 @@ urlpatterns = [
     path('user/login/', views.login_user, name='login'),
     path('user/<str:username>/logout/', views.logout_user, name='logout'),
     path('blog/<int:user_id>/blogs/', views.user_blog, name='user_blog'),
-    path('password/<str:username>/change/', views.password_change,name='password_change'),
+    path('password/<str:username>/change/',
+         views.password_change, name='password_change'),
     # path('password/<str:username>/reset', views.password_reset, name="password_reset"),
-    path('password/<str:username>/forgot/', views.password_forgot, name='password_forgot'),
-    path('password/<str:token>/forgot/change/', views.forgot_password_change, name="password_forgot_change"),
-    path('user/<str:token>/activation/', views.activation, name="user_activation"),
+    path('password/<str:username>/forgot/',
+         views.password_forgot, name='password_forgot'),
+    path('password/<str:token>/forgot/change/',
+         views.forgot_password_change, name="password_forgot_change"),
+    path('user/<str:token>/activation/',
+         views.activation, name="user_activation"),
     # path('<int:pk>/share/', views.post_share, name="post_share"),
     # path('profile/<int:pk>/view/', views.profile_view,name="profile"),
     # path('profile/<int:pk>/edit/', views.profile_edit,name="profile"),

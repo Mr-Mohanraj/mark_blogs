@@ -38,15 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    
+
     # # 'tailwind' setup
     # 'tailwind', # from the django-tailwind library
     # 'theme', # from inbuilt app, create by the 'python manage.py tailwind init' after enter app name
 ]
 
 # # tailwind css framework register
-# TAILWIND_APP_NAME = 'theme' 
-# # after this run the commend following 'python manage.py tailwind install' for all required dependency to install 
+# TAILWIND_APP_NAME = 'theme'
+# # after this run the commend following 'python manage.py tailwind install' for all required dependency to install
 
 
 MIDDLEWARE = [
