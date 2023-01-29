@@ -2,7 +2,7 @@
 
 
 {% block content %}
-{% for message in messages %}
+{% comment %} {% for message in messages %}
 <div class="container-fluid p-0">
     <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
         <button type="button" class="btn btn-close btn-danger" data-dismiss="alert" aria-label="Close">
@@ -11,8 +11,8 @@
         {{ message }}
     </div>
 </div>
-{% endfor %}
-    {% if user.is_login %}
+{% endfor %} {% endcomment %}
+    {% if user.is_authenticated %}
         <div class="container-fluid m-auto py-3 d-flex justify-content-center flex-column">
             <h1 class="btn bg-info m-auto">{{user.username}}</h1><br><br>
             <a class="btn bg-success m-auto" href="{% url 'blog:blog_add' user.username %}">ADD New Post</a><br><br>

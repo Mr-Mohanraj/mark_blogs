@@ -11,14 +11,14 @@
     <title>Django Blog</title>
     <style>
       body{
-        background-color:#f1f77d;
+        background-color:#f6bbf9;
       }
       .post_title{
         color:black;
         padding-right:30px;
       }
       .navbar{
-        background-color:#f6bbf9;
+        background-color:#f1f77d;
         color:#bd7732;
       }
       .navbar-toggler{
@@ -48,7 +48,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'blog:blog_list' %}" active>Blogs</a>
               </li>
-              {% if user.is_login %}
+              {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'blog:blog_add' user.username %}" active>ADD Blog</a>
               </li>
@@ -81,7 +81,16 @@
           <div>
         </div>
     </nav>
-  
+    {% for message in messages %}
+<div class="container-fluid p-0">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        <button type="button" class="btn btn-close btn-danger" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="True">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
     {% block content %}
         
     {% endblock content %}

@@ -3,20 +3,24 @@
 
 {% block content %}
 <hr style="color:red;">
+<p class="bg-danger">{{post.id}}<p>
 <div class='container-lg d-flex justify-content-center border-info'>
-    <a class="text-decoration-none" href="{% url 'blog:blog_detail' user.id %}">
     <div class="post_div container-lg text-start">
-        <p class="post_title"><mark class="bg-success">{{post.title}}</mark></p>
+        <p class="post_title container-lg"><mark class="bg-success">{{post.title}}</mark></p>
         <p class='bg-info text-sm-end' style="width: fit-content; display:contents;"> Author Name <mark>{{post.author}}</mark> Create at {{post.create_at}}</p>
         <p class="body_post"> {{post.body}}</p><br>
         <hr>
     </div>
-    </a>
 </div>
+
+{% if post.author.id == user.id %}
 <div class="container-fluid  btn btn-group">
-    <a class="btn btn-warning " href="{% url 'blog:blog_edit' post.id %}">Edit post</a>
-    <a class="btn btn-info" href="{% url 'blog:blog_list' %}">List view</a><br>
+    <a class="btn btn-dark" href="{% url 'blog:blog_edit' post.id %}">Edit post</a>
+    <a class="btn btn-info" href="{% url 'blog:user_blog' user.id %}">List {{user.username}} blog</a><br>
     <a class="btn btn-danger" href="{% url 'blog:blog_delete' post.id %}">Delete</a><br>
 </div>
+{% endif %}
+    
+
 {% endblock content %}
     

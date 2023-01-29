@@ -21,6 +21,10 @@ class Post(models.Model):
     
     class Meta:
         ordering = ["-create_at"]
+    
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('blog:blog_detail', args=[self.pk])
 
 class Token(models.Model):
     activation_token = models.CharField(max_length=64)
