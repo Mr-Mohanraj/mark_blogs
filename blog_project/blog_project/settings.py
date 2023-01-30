@@ -14,11 +14,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 load_dotenv()
-#import os
-#import MySQLdb
-#import pymysql
-
-#pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,17 +88,16 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-#DATABASES = {
- # 'default': {
-  #  'ENGINE': 'django_psdb_engine',
-   # 'NAME': os.environ.get('DB_NAME'),
-   # 'HOST': os.environ.get('DB_HOST'),
-   # 'PORT': os.environ.get('DB_PORT'),
-    #'USER': os.environ.get('DB_USER'),
-    #'PASSWORD': os.environ.get('DB_PASSWORD'),
-    #'OPTIONS': {'ssl': {'ssl-ca': os.environ.get('MYSQL_ATTR_SSL_CA')},'charset': 'utf8mb4'}
-  #}
-#}
+DATABASES = {
+ 'default': {
+  'ENGINE': 'django.db.backends.postgresql',
+   'NAME': os.environ.get('DB_NAME'),
+   'HOST': os.environ.get('DB_HOST'),
+    'PORT': os.environ.get('DB_PORT'),
+    'USER': os.environ.get('DB_USER'),
+    'PASSWORD': os.environ.get('DB_PASSWORD'),
+  }
+}
 
 # 'OPTIONS': {'ssl': {'ca': os.environ.get('MYSQL_ATTR_SSL_CA')}}
 # Finally got it working. the value for the OPTIONS key should be {'ssl': {'ssl-ca': env('MYSQL_ATTR_SSL_CA')}}
@@ -119,26 +113,6 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
        #     'charset': 'utf8mb4',  # <--- Use this
         #}
     #}
-
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'uqhiejkx',
-    'USER': 'uqhiejkx',
-    'PASSWORD': 'oHmtqrU98XhvQT2XSu2ck9FSDh4OWJ_r',
-    # ↓ HOST instead of HOSTS
-    'HOST': 'rogue.db.elephantsql.com',
-    'PORT': ''
-  }
-}
-
-#DATABASES = {
- #   'default': {
-   #     'ENGINE': 'django.db.backends.sqlite3',
-   #     'NAME': BASE_DIR / 'db.sqlite3',
-   #}
-#}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
