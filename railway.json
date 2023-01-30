@@ -3,8 +3,13 @@
   "build": {
     "builder": "NIXPACKS"
   },
+  "service":{
+  "serversName":"mark_blogs",
+  "SourceRepo":"https://github.com/Mr-Mohanraj/mark_blogs",
+  "RootDirectory":"/",
+  }
   "deploy": {
-    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyType":"never",
     "restartPolicyMaxRetries": 10
   }
 }
