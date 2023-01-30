@@ -165,6 +165,9 @@ LOGIN_SUCCESS_URL = 'home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+CORS_ORIGIN_ALLOW_ALL= True
+CORS_ALLOW_CREDENTIALS = True
+
 CSRF_TRUSTED_ORIGINS = ["https://markblogs-production.up.railway.app/"]
 
 print(os.system("ls"))
