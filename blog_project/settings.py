@@ -165,12 +165,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_SUCCESS_URL = 'home'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 CSRF_TRUSTED_ORIGINS = ["http://*.railway.app","https://markblogs-production.up.railway.app"]
 
 
 CORS_ORIGIN_ALLOW_ALL= True
 CORS_ALLOW_CREDENTIALS = True
+
+EMAIL_HOST_USER = os.environ.get("host_mail")
+EMAIL_HOST_PASSWORD  = os.environ.get("host_mail_password")
 
 print(os.system("ls"))

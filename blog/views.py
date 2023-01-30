@@ -140,7 +140,7 @@ def signup_user(request):
         user.is_active = False
         user.save()
         url = request.build_absolute_uri('/')
-        send_activation_code(username, url)
+        send_activation_code(user, url)
         messages.success(request, "Activation code set your email")
         return render(request, 'blog/account_activation.html')
     else:
@@ -332,24 +332,21 @@ def forgot_password_change(request, token):
         return render(request, 'blog/password_forgot.html', {"password_forgot_change": True})
 
 
-def send_activation_code(username, url):
+def send_activation_code(user, url):
     encode_data = generate_token(
-        hide_data={"username": username}, key="activation key", mode='encode')
+        hide_data={"username": user.username}, key="activation key", mode='encode')
     send_mail(
         "For your activate account in mark_blogs",
         "activation click the link :" f"{url}user/{encode_data}/activation/",
         "mohanraj@markblogs.com",
-        ["someone@gmail.com"],
+        [user.email],
         fail_silently=True
     )
-    print(encode_data)
-
 
 def activation(request, token):
     username = generate_token(key="activation key",
                               mode='decode', token=token)['username']
     url = request.build_absolute_uri('/')
-    print(username)
     if User.objects.filter(username=username).exists():
         user = User.objects.get(username=username)
         if not user.is_active:
