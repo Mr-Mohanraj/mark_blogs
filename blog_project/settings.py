@@ -165,6 +165,6 @@ LOGIN_SUCCESS_URL = 'home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-CSRF_TRUSTED_ORIGINS = ['https://random-motivator-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ["https://markblogs-production.up.railway.app/"]
 
 print(os.system("ls"))
