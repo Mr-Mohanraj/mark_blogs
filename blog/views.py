@@ -300,7 +300,7 @@ def password_forgot(request, username):
                                mode='encode')
         send_mail(
             'Your password change token',
-            f"Click the link to verified to change your password {username} => {request.build_absolute_uri('/')}'password/{token}/forgot/change/",
+            f"Click the link to verified to change your password {username} => {request.build_absolute_uri('/')}password/{token}/forgot/change/",
             'mohanraj@markblogs.com',
             [email],
             fail_silently=True,
