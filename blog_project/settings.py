@@ -23,12 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2b8!$2fl1tphe_c00so_b%66zjf^qcpl&+^0$$--o7k5cyio03'
-
+SECRET_KEY = os.environ.get('secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -89,15 +88,22 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
- 'default': {
-  'ENGINE': 'django.db.backends.postgresql',
-   'NAME': os.environ.get('DB_NAME'),
-   'HOST': os.environ.get('DB_HOST'),
-    'PORT': os.environ.get('DB_PORT'),
-    'USER': os.environ.get('DB_USER'),
-    'PASSWORD': os.environ.get('DB_PASSWORD'),
-  }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'blogsqlite.db'),
+    }
 }
+
+#DATABASES = {
+ #'default': {
+  #'ENGINE': 'django.db.backends.postgresql',
+   #'NAME': os.environ.get('DB_NAME'),
+   #'HOST': os.environ.get('DB_HOST'),
+    #'PORT': os.environ.get('DB_PORT'),
+   # 'USER': os.environ.get('DB_USER'),
+  #  'PASSWORD': os.environ.get('DB_PASSWORD'),
+ # }
+#}
 
 # 'OPTIONS': {'ssl': {'ca': os.environ.get('MYSQL_ATTR_SSL_CA')}}
 # Finally got it working. the value for the OPTIONS key should be {'ssl': {'ssl-ca': env('MYSQL_ATTR_SSL_CA')}}
@@ -158,3 +164,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_SUCCESS_URL = 'home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CSRF_TRUSTED_ORIGINS = ['https://random-motivator-production.up.railway.app']
+
+print(os.system("ls"))
