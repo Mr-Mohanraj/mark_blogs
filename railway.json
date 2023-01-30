@@ -9,7 +9,7 @@
   "RootDirectory":"/"
   },
   "deploy": {
-    "restartPolicyType":"never",
+    "restartPolicyType":"NEVER",
     "restartPolicyMaxRetries": 10
   }
 }
