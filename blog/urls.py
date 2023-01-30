@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from . import views
 
 app_name = 'blog'
@@ -31,3 +32,5 @@ urlpatterns = [
     # path('profile/<int:pk>/dashboard/', views.profile_dash, name="profile_dash"),
     # path('/<str:username>/view/', views.profile_other,name="profile_view"),
 ]
+
+urlpatterns += staticfiles_urlpatterns();
