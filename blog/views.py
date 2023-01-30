@@ -141,7 +141,7 @@ def signup_user(request):
         user.save()
         url = request.build_absolute_uri('/')
         send_activation_code(user, url)
-        messages.success(request, "Activation code set your email")
+        messages.success(request, f"Activation code set your {email}")
         return render(request, 'blog/account_activation.html')
     else:
         return render(request, 'blog/signup_form.html')
@@ -333,6 +333,7 @@ def forgot_password_change(request, token):
 
 
 def send_activation_code(user, url):
+    print(user.username, user.email)
     encode_data = generate_token(
         hide_data={"username": user.username}, key="activation key", mode='encode')
     send_mail(
@@ -340,7 +341,7 @@ def send_activation_code(user, url):
         "activation click the link :" f"{url}user/{encode_data}/activation/",
         "mohanraj@markblogs.com",
         [user.email],
-        fail_silently=True
+        fail_silently=True,
     )
 
 def activation(request, token):

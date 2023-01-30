@@ -174,6 +174,9 @@ CSRF_TRUSTED_ORIGINS = ["http://*.railway.app","https://markblogs-production.up.
 CORS_ORIGIN_ALLOW_ALL= True
 CORS_ALLOW_CREDENTIALS = True
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get("host_mail")
 EMAIL_HOST_PASSWORD  = os.environ.get("host_mail_password")
 
