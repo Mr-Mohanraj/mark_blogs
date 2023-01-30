@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["http://*.railway.app"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -166,14 +166,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_SUCCESS_URL = 'home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-<<<<<<< HEAD
-CSRF_TRUSTED_ORIGINS = ['http://*.railway.app',"https://markblogs-production.up.railway.app/"]
-=======
+
+CSRF_TRUSTED_ORIGINS = ["http://*.railway.app","https://markblogs-production.up.railway.app"]
+
 
 CORS_ORIGIN_ALLOW_ALL= True
 CORS_ALLOW_CREDENTIALS = True
-
-CSRF_TRUSTED_ORIGINS = ["https://markblogs-production.up.railway.app/"]
->>>>>>> 23965cbf9c08f9879013810a0f783a0807ee3a6b
 
 print(os.system("ls"))
