@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 .post_title{
@@ -17,4 +18,9 @@
 }
 .post_div{
   background-color:#bd7732;
+=======
+body{
+    background-color:blue !important;
+    color: black;
+>>>>>>> 740cd33579d7284b925346df65e321e2a489cf92
 }
