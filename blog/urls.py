@@ -25,12 +25,13 @@ urlpatterns = [
     path('user/<str:token>/activation/',
          views.activation, name="user_activation"),
     # path('<int:pk>/share/', views.post_share, name="post_share"),
-    # path('profile/<int:pk>/view/', views.profile_view,name="profile"),
-    # path('profile/<int:pk>/edit/', views.profile_edit,name="profile"),
+    path('profile/<int:pk>/view/', views.profile,name="profile"),
+    # path('profile/<int:pk>/edit/', views.profile_edit,name="profile_edit"),
     # path('profile/<int:pk>/update/', views.profile_update, name="profile_update"),
     # path('profile/<int:pk>/share/', views.profile_share, nme="profile_share"),
     # path('profile/<int:pk>/dashboard/', views.profile_dash, name="profile_dash"),
     # path('/<str:username>/view/', views.profile_other,name="profile_view"),
+    
 ]
 
 urlpatterns += staticfiles_urlpatterns();

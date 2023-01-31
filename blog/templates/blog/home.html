@@ -21,6 +21,7 @@
         </div>
     {% else %}
         <div>
+            <a class="nav-link active" aria-current="page" href="{% url 'blog:profile' 1 %}">Profile</a>
         <a class="btn btn-info" href="{% url 'blog:signup' %}">Signup</a><br><hr>
         <a class="btn btn-success" href="{% url 'blog:login' %}">login</a><br>
         </div>

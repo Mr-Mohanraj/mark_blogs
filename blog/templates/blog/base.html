@@ -12,29 +12,7 @@
 
 
     <title>Django Blog</title>
-    <style>
-      body{
-        background-color:#f6bbf9;
-      }
-      .post_title{
-        color:black;
-        padding-right:30px;
-      }
-      .navbar{
-        background-color:#f1f77d;
-        color:#bd7732;
-      }
-      .navbar-toggler{
-        background-color:#bd7732 !important;
-      }
-      .body_post{
-        background-color:#bd7732;
-        color:black;
-      }
-      .post_div{
-        background-color:#bd7732;
-      }
-    </style>
+
   </head>
   <body>
     <nav class="navbar navbar-expand-lg sticky-top">
@@ -73,7 +51,7 @@
                 <a class="nav-link active" aria-current="page" href="{% url 'blog:login' %}">Login</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'blog:signup' %}">Signup</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'blog:signup' %}">Sign up</a>
               </li>
               {% endif %}
             </ul>
@@ -85,8 +63,8 @@
         </div>
     </nav>
     {% for message in messages %}
-<div class="container-fluid p-0">
-    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+      <div class="container-fluid p-0">
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
         <button type="button" class="btn btn-close btn-danger" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="True">&times;</span>
         </button>

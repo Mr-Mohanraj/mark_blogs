@@ -6,10 +6,11 @@ from django.contrib.auth import login, logout
 from django.core.mail import send_mail
 from django.http.response import Http404
 import jwt
+from django.http import HttpResponse
 
 
 def home(request):
-    return render(request, 'blog/home.html', {})
+    return render(request, 'blog/home.html')
     '''
     without inbuilt login function
     if request.session.has_key('user'):
@@ -363,6 +364,9 @@ def activation(request, token):
         return render(request, 'blog/account_activation.html')
 
 
+def profile(request, pk):
+    user_info = get_object_or_404(User, pk=pk)
+    return render(request, "blog/profile.html", {"user":user_info})
 # def set_cookie(
 #         response: HttpResponse,
 #         key: str,
