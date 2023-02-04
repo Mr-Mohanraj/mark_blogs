@@ -1,16 +1,19 @@
+import json
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
-from .models import Post, User
+from .models import Post, User, Follower
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.core.mail import send_mail
 from django.http.response import Http404
 import jwt
-from django.http import HttpResponse
+import random
+from django.conf import settings
 
 
 def home(request):
-    return render(request, 'blog/home.html')
+    return render(request, 'blog/home.html', {"quote": get_random_quote()})
     '''
     without inbuilt login function
     if request.session.has_key('user'):
@@ -51,7 +54,17 @@ def blog_list(request):
 
 def blog_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/blog_detail.html', {"post": post})
+    if request.method == "POST":
+        result = _checker(request.POST)
+        if result == "like":
+            obj = add_likes(request, post.id)
+        elif result == "dislike":
+            obj = add_dislikes(request, post.id)
+        elif result == "Error":
+            print("Something is wrong")
+        return render(request, 'blog/blog_detail.html', {"post": post, "instance": obj})
+    else:
+        return render(request, 'blog/blog_detail.html', {"post": post, "instance": post})
 
     '''
     without inbuilt login function
@@ -88,7 +101,7 @@ def blog_delete(request, pk):
         messages.success(
             request, f"{post.title} was delete successfully! by {post.author.username}")
         post.delete()
-        return redirect('blog:user_blog', args=[post.author.id])
+        return redirect('blog:home')
     except ObjectDoesNotExist:
         return render(request, 'blog/404.html')
 
@@ -102,7 +115,7 @@ def blog_add(request, username):
             post = Post(title=title, body=body, author=user)
             messages.success(request, f"post add successfully!")
             post.save()
-            return render(request, 'blog/blog_detail.html', {"post": post})
+            return redirect("blog:blog_detail", pk=post.id)
         except ObjectDoesNotExist:
             return render(request, 'blog/404.html', {"error": ObjectDoesNotExist})
     else:
@@ -154,8 +167,6 @@ def login_user(request):
         password = request.POST['password']
         try:
             user = User.objects.get(username=username)
-            print(dir(user))
-            print(user.username)
             if user is not None:
                 if User.objects.filter(username=username).exists() and user.username == username:
                     messages.info(request, "username is correct")
@@ -334,7 +345,6 @@ def forgot_password_change(request, token):
 
 
 def send_activation_code(user, url):
-    print(user.username, user.email)
     encode_data = generate_token(
         hide_data={"username": user.username}, key="activation key", mode='encode')
     send_mail(
@@ -344,6 +354,7 @@ def send_activation_code(user, url):
         [user.email],
         fail_silently=True,
     )
+
 
 def activation(request, token):
     username = generate_token(key="activation key",
@@ -366,7 +377,249 @@ def activation(request, token):
 
 def profile(request, pk):
     user_info = get_object_or_404(User, pk=pk)
-    return render(request, "blog/profile.html", {"user":user_info})
+    return render(request, "blog/profile.html", {"user": user_info})
+
+
+def get_random_quote():
+    with open(settings.BASE_DIR/'static/sample.json', 'r') as file:
+        file_data = json.load(file)
+        quote = {"quote": "", "author": ""}
+        if random.randint(1, 99) == 41:
+            pass
+        else:
+            quote = file_data[f"quote {random.randint(1,99)}"]
+    return quote['quote'], quote['author']
+
+
+def add_follower(request, pk):
+    # follower = get_object_or_404(Follower, pk=pk)
+    return render(request, "blog/add_follower.html")
+
+
+def add_dislikes(request, pk):
+    like_obj = get_object_or_404(Post, pk=pk)
+    user = request.user
+    if not (str(user) == str(like_obj.author.username)):
+        if user.is_authenticated:
+            if user in like_obj.dislikes.all():
+                like_obj.dislikes.remove(user)
+                return like_obj
+            else:
+                like_obj.dislikes.add(user)
+                return like_obj
+        else:
+            return like_obj
+    else:
+        messages.error("can't dislike your own post")
+        return like_obj
+
+
+def add_likes(request, pk):
+    like_obj = get_object_or_404(Post, pk=pk)
+    user = request.user
+    if not (str(user.username) == str(like_obj.author.username)):
+        if user.is_authenticated:
+            if user in like_obj.likes.all():
+                like_obj.likes.remove(user)
+                return like_obj
+            else:
+                like_obj.likes.add(user)
+                return like_obj
+        else:
+            return redirect("blog:login")
+    else:
+        messages.error("can't like your own post")
+        return like_obj
+
+# def search_user(request):
+#     try:
+#         username = request.POST.get("q")
+#         user = get_object_or_404(User, username=username)
+#         return render(request, "blog/search_result.html", {"result":user})
+#     except Http404:
+#         messages.error(request, "Invalid username, please enter correct username")
+#         return render(request, "blog/search_result.html", {"result":user})
+
+
+def search_user(request):
+    """ search function  """
+    if request.method == "POST":
+        query_name = request.POST.get('q', None)
+        print(query_name)
+        if query_name:
+            results = User.objects.filter(username__contains=query_name)
+            print("results", results)
+            return render(request, 'blog/search_result.html', {"results": results})
+    return render(request, 'blog/search_result.html')
+
+
+def all_users(request):
+    users = User.objects.all()
+    return render(request, "blog/users_page.html", {"users": users})
+
+
+def profile(request, pk):
+    user = get_object_or_404(User, pk)
+    return redirect("blog:profile",pk=user.pk)
+
+
+def add_follower(request, pk):
+    try:
+        follow = get_object_or_404(Follower, pk=pk)
+        users = get_object_or_404(User, pk=pk)
+    except Http404:
+        follow = Follower(pk=pk)
+        follow.save()
+
+    user = request.user
+    if user.is_authenticated:
+        if user in follow.follower.all():
+            messages.error(request, "You already follow this person")
+            return render(request, "blog/profile.html", {"users": users, "follow": follow, "choose": "add_follower"})
+        else:
+            follow.follower.add(user)
+            messages.success(request, "follower is successfully")
+            return render(request, "blog/profile.html", {"users": users, "follow": follow, "choose": "add_follower"})
+    else:
+        messages.success(request, "Login first")
+        return render(request, "blog/profile.html", {"users": users, "follow": follow, "choose": "add_follower"})
+
+
+def add_following(request, pk):
+    try:
+        follow = get_object_or_404(Follower, pk=pk)
+    except Http404:
+        follow = Follower(pk=pk)
+        follow.save()
+    user = request.user
+    if user.is_authenticated:
+        if user in follow.following.all():
+            messages.error(request, "You already following this person")
+            return render(request, "blog/profile.html", {"following": follow, "choose": "add_following"})
+        else:
+            follow.follower.add(user)
+            messages.success(request, "following is successfully")
+            return render(request, "blog/profile.html", {"following": follow, "choose": "add_following"})
+    else:
+        messages.success(request, "Login first")
+        return render(request, "blog/profile.html", {"following": follow, "choose": "add_following"})
+    # return render(request, "blog/profile.html", {"instance":follow,"choose":"add_following"})
+
+
+def remove_follower(request, pk):
+    follow = get_object_or_404(Follower, pk=pk)
+    user = request.user
+    if user.is_authenticated:
+        if user in follow.follower.all():
+            follow.follower.remove(user)
+            messages.success(request, "un following is successfully")
+            return render(request, "blog/profile.html", {"following": follow, "choose": "remove_follower"})
+        else:
+            messages.error(request, "Your not follow the person")
+            return render(request, "blog/profile.html", {"following": follow, "choose": "remove_follower"})
+    else:
+        return render(request, "blog/profile.html", {"instance": follow, "choose": "remove_follower"})
+
+
+def remove_following(request, pk):
+    follow = get_object_or_404(Follower, pk=pk)
+    user = request.user
+    if user.is_authenticated:
+        if user in follow.following.all():
+            follow.following.remove(user)
+            messages.success(request, "Un following is successfully")
+            return render(request, "blog/profile.html", {"instance": follow, "choose": "remove_following"})
+        else:
+            messages.success(request, "you not follow the person")
+            return render(request, "blog/profile.html", {"instance": follow, "choose": "remove_following"})
+    else:
+        return render(request, "blog/profile.html", {"instance": follow, "choose": "remove_following"})
+
+
+def view_follower(request, pk):
+    print("pk #####", pk)
+    try:
+        print("inside the try")
+        users = get_object_or_404(User, pk=pk)
+        obj = get_object_or_404(Follower, pk=pk)
+        followers = obj.follower.all()
+        return render(request, 'blog/profile.html', {"users": users, "instance": obj, "followers": followers, "choose": "view_follower"})
+    except Http404:
+        print("Inside the except")
+        obj = Follower(pk=pk)
+        obj.save()
+        followers = obj.follower.all()
+        return render(request, 'blog/profile.html', {"users": users, "instance": obj, "followers": followers, "choose": "view_follower"})
+
+
+def view_following(request, pk):
+    print("pk #####", pk)
+    try:
+        print("inside the try")
+        users = get_object_or_404(User, pk=pk)
+        obj = get_object_or_404(Follower, pk=pk)
+        following = obj.following.all()
+        return render(request, 'blog/profile.html', {"users": users, "instance": obj, "following": following, "choose": "view_following"})
+    except Http404:
+        print("Inside the except")
+        obj = Follower(pk=pk)
+        obj.save()
+        following = obj.follower.all()
+        return render(request, 'blog/profile.html', {"users": users, "instance": obj, "following": following, "choose": "view_following"})
+
+    # print("value",value)
+    # print(bool(value))
+    # cur_user = user
+    # like_user = ""
+    # request.COOKIES["count"] = 0
+    # if not (cur_user == like_user):
+    #     print("inside the logic")
+    #     count += 1
+    #     like_user = user
+    # if count == 1:
+    #     count = 0
+    #     #     print("you already like this post")
+    #     # print("count", count)
+    #     if not (str(user) == str(like_obj.author.username)):
+    #         if value:
+    #             try:
+    #                 print("Inside the try")
+    #                 if value['like'] == "likebutton":
+    #                     like_obj.like = like_obj.like + 1
+    #                     like_obj.save()
+    #                     print("like",like_obj.like)
+    #                     return like_obj
+    #                 elif value['like'] == "dislikebutton":
+    #                     print("inside the dislike button")
+    #                     like_obj.dislike = like_obj.dislike + 1
+    #                     like_obj.save()
+    #                     print("dislike",like_obj.dislike)
+    #                     return like_obj
+    #                     # return render(request, "blog/blog_detail.html", {"likes":like_obj})
+    #             except MultiValueDictKeyError:
+    #                 print("error")
+    #         else:
+    #             print("inside the else")
+    #             return like_obj
+    #     else:
+    #         print("You can't add likes i your blog")
+    #         return like_obj
+    # else:
+    #     print("likeeeeeee#########################")
+    #     return like_obj
+
+
+def _checker(value):
+    try:
+        if value['like'] == "likebutton":
+            return "like"
+        elif value['like'] == "dislikebutton":
+            return "dislike"
+            # return render(request, "blog/blog_detail.html", {"likes":like_obj})
+    except MultiValueDictKeyError:
+        return "Error"
+
+    # return render(request, "blog/blog_detail.html", {"likes":like_obj})
 # def set_cookie(
 #         response: HttpResponse,
 #         key: str,

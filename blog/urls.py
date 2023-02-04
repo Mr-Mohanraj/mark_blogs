@@ -24,8 +24,17 @@ urlpatterns = [
          views.forgot_password_change, name="password_forgot_change"),
     path('user/<str:token>/activation/',
          views.activation, name="user_activation"),
+    path('user/<int:pk>/add_follow/',views.add_follower,name="add_follower"),
+    path('user/<int:pk>/remove_follow/', views.remove_follower,name="remove_follower"),
+    path('user/<int:pk>/add_unfollow/', views.add_following,name="add_following"),
+    path('user/<int:pk>/remove_unfollow/', views.remove_following,name="remove_following"),
+    path('post/<int:pk>/likes/', views.add_likes, name="likes"),
+    path('user/all/', views.all_users, name="all_users"),
     # path('<int:pk>/share/', views.post_share, name="post_share"),
-    path('profile/<int:pk>/view/', views.profile,name="profile"),
+    path('profile/<int:pk>/view/', views.view_follower, name="profile"),
+    path('profile/<int:pk>/follower/', views.view_follower, name="follower_profile"),
+    path('profile/<int:pk>/following/', views.view_following, name="following_profile"),
+    path('search/',views.search_user, name="search_user")
     # path('profile/<int:pk>/edit/', views.profile_edit,name="profile_edit"),
     # path('profile/<int:pk>/update/', views.profile_update, name="profile_update"),
     # path('profile/<int:pk>/share/', views.profile_share, nme="profile_share"),
@@ -34,4 +43,4 @@ urlpatterns = [
     
 ]
 
-urlpatterns += staticfiles_urlpatterns();
+urlpatterns += staticfiles_urlpatterns()

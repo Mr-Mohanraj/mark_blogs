@@ -2,7 +2,49 @@
 
 {% block content %}
 <div class="container bg-info">
-    <p class="btn ">{{user.username}}</p>
-    <p class="btn">{{user.email}}</p>
+    <p class="btn ">Username: {{users.username}}</p>
+    <p class="btn">Email: {{users.email}}</p>
 </div>
+<div class='container bg-success'>
+    <p><a class="bg-info btn btn-info" href="#">Account</a></p>
+    <p><a class="bg-info btn btn-info" href="{% url 'blog:follower_profile' user.id %}">Follower</a></p>
+    <p><a class="bg-info btn btn-info" href="{% url 'blog:following_profile' user.id %}">Following</a></p>
+    <p><a class="bg-info btn btn-info" href="{% url 'blog:user_blog' user.id %}">blogs</a></p>
+    <p><a class="bg-info btn btn-info" href="{% url 'blog:password_change' user.username%}">Password Change</a></p>
+    <p><a class="bg-info btn btn-info" href="{% url 'blog:password_forgot' user.username%}">Forgot password</a></p>
+    <p><a href="{% url 'blog:follower_profile' user.pk %}" class="btn btn-info">Follower count <span class="bg-info">{{instance.follower.count}}</span></a></p>
+    <p><a href="{% url 'blog:following_profile' user.pk %}" class="btn btn-info">Following count <span class='bg-primary'>{{instance.following.count}}<span></a></p>
+    <p><a class="bg-info btn btn-info"  href="{% url 'blog:logout' user.username %}">Logout</a></p>
+</div>
+
+
+{% if choose == "add_follower" %}
+    <p class="btn btn-info"><a href="{% url 'blog:following_profile' users.pk %}">{{follow.username}} <span class="btn btn-info">Following</span></a></p><br>
+    <p class="btn btn-info"><a href="{% url 'blog:follower_profile' users.pk %}">{{follow.username}} <span class="btn btn-info">Follower</span></a></p><br>
+{% elif choose == "add_following"%}
+    <a href="{% url 'blog:following_profile' user.pk %}"><p class="btn">Following</p></a>
+    {% for follow in following %}
+    <a href="{% url 'blog:following_profile' follow.pk %}">{{follow.username}}</a>
+    {% endfor %}
+{% elif choose == "remove_follower"%}
+    <a href="{% url 'blog:remove_follower' user.pk %}"><p class="btn">Un follow</p></a>
+    <a href="{% url 'blog:remove_follower' following.pk %}"  >{{follow.username}}</a>
+{% elif choose == "remove_following"%}
+    {% for follow in following %}
+    <a href="{% url 'blog:following_profile' user.pk %}"><p class="btn">Un Following</p></a>
+    <a href="{% url 'blog:follower_profile' follow.pk %}"  >{{follow.username}}</a>
+    {% endfor %}
+{% elif choose == "view_follower" %}
+    <p><a href="{% url 'blog:remove_follower' users.pk %}" class="btn btn-info">Un Follow</a></p>
+    <p><a href="{% url 'blog:add_follower' users.pk %}" class="btn btn-info">Follow</a></p>
+    {% for follow in followers %}
+    <p class="btn btn-info"><a href="{% url 'blog:profile' follow.pk %}">{{follow.username}}</a><a class="brn btn-danger"href="{% url 'blog:remove_follower' follow.id %}"></a></p><br>
+    {% endfor %}
+{% elif choose == "view_following" %}
+    <p><a href="{% url 'blog:remove_following' users.pk %}" class="btn btn-info">Un Follow</a></p>
+    {% for follow in following %}
+    <p class="btn btn-info"><a href="{% url 'blog:follower_profile' follow.pk %}">{{follow.username}}</a></p><br>
+    {% endfor %}
+{% endif %}
+
 {% endblock content %}

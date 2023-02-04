@@ -1,0 +1,4 @@
+<form class="form-control" method="post">
+    {% csrf_token %}
+<button class="btn btn-info" type="submit" name="like" value="likebutton">Like<span class='bg-success'>{{instance.likes.count}}</span></button>
+</form>

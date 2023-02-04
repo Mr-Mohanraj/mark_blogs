@@ -39,6 +39,8 @@
                 </a>
                 <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item" href="#">Account</a></li>
+                  <li><a class="dropdown-item" href="{% url 'blog:follower_profile' user.id %}">Follower</a></li>
+                  <li><a class="dropdown-item" href="{% url 'blog:following_profile' user.id %}">Following</a></li>
                   <li><a class="dropdown-item" href="{% url 'blog:user_blog' user.id %}">blogs</a></li>
                   <li><a class="dropdown-item" href="{% url 'blog:password_change' user.username%}">Password Change</a></li>
                   <li><a class="dropdown-item" href="{% url 'blog:password_forgot' user.username%}">Forgot password</a></li>
@@ -54,11 +56,13 @@
                 <a class="nav-link active" aria-current="page" href="{% url 'blog:signup' %}">Sign up</a>
               </li>
               {% endif %}
-            </ul>
-            <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
+              <form class="d-flex" action="{% url 'blog:search_user' %}" method="post">
+                {% csrf_token %}
+                <input class="form-control me-2" name="q"type="search" placeholder="Username" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+              {% comment %} {% include 'blog/search_result.html' %} {% endcomment %}
+            </ul>
           <div>
         </div>
     </nav>
