@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {%if user.is_active %}
+    <p>active successfully go and login now </p>
+    <a class="btn btn-success" href="{% url 'auth:login' %}">Login</a>
+    {%else%}
+    <p>activation code send to your email check {{user.email}}</p>
+    <form method='post'>
+        {% csrf_token %}
+        <label class="from-lable">
+            Re-send: <button class="btn btn-success">Send</button>
+        </label>
+    </form>
+    {% endif %}
+{% endblock content %}
+    

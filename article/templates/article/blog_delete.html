@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+    {{post.title}}
+    {{post.body}}<br>
+    <button type="submit">Confirm<button><br>
+    </form><hr>
+    <a href="{url 'blog:blog_list'}">List View</a>
+{% endblock content %}

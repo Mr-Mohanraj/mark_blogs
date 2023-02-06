@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% comment %} {% for message in messages %}
+<div class="container-fluid p-0">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        <button type="button" class="btn btn-close btn-danger" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="True">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+</div>
+{% endfor %} {% endcomment %}
+{% for q in quote  %}
+<div class="">
+    <p class="btn btn-info">{{q}}</p>
+</div>
+{% endfor %}
+{% comment %} <a class="nav-link active btn btn-info" aria-current="page" href="{% url 'blog:following_profile' user.id %}">following</a>
+<a class="nav-link active btn btn-info" aria-current="page" href="{% url 'blog:add_follower' user.id %}">add follow</a>
+<a class="nav-link active btn btn-info" aria-current="page" href="{% url 'blog:remove_follower' user.id %}">remove follow</a>
+<a class="nav-link active btn btn-info" aria-current="page" href="{% url 'blog:add_following' user.id %}">add following</a>
+<a class="nav-link active btn btn-info" aria-current="page" href="{% url 'blog:remove_following' user.id %}">remove_unfollow</a> {% endcomment %}
+
+{% comment %} <a class="nav-link active btn btn-info" aria-current="page" href="{% url 'blog:add_follow' user.id %}">follow</a>
+<a class="nav-link active btn btn-info" aria-current="page" href="{% url 'blog:add_follow' user.id %}">unfollow</a> {% endcomment %}
+{% comment %} <a class="nav-link active btn btn-info" aria-current="page" href="{% url 'blog:likes' 3 %}">Like</a> {% endcomment %}
+
+    {% if user.is_authenticated %}
+        <div class="container-fluid m-auto py-3 d-flex justify-content-center flex-column">
+            <h1 class="btn bg-info m-auto">{{user.username}}</h1><br><br>
+            <a class="btn bg-success m-auto" href="{% url 'blog:blog_add' user.username %}">ADD New Post</a><br><br>
+            <a class="btn bg-success m-auto" href="{% url 'blog:user_blog' user.id %}">View All Blog {{user.username}}</a><br><br>
+            <a class="btn bg-danger m-auto py-1" href="{% url 'auth:logout' user.username %}">Logout</a><br><br>
+            <a class="nav-link active btn btn-info" aria-current="page" href="{% url 'auth:all_users' %}">All users</a>
+            <a class="nav-link active btn btn-info" aria-current="page" href="{% url 'auth:profile' user.id %}">Profile</a>
+        </div>
+    {% else %}
+        <div>
+        <a class="btn btn-info" href="{% url 'auth:signup' %}">Signup</a><br><hr>
+        <a class="btn btn-success" href="{% url 'auth:login' %}">login</a><br>
+        </div>
+        {% comment %} <a class="btn bg-success m-auto" href="{% url 'blog:user_blog' user.id %}">View All Blog {{user.username}}</a><br><br> {% endcomment %}
+    {% endif %}
+{% endblock content %}

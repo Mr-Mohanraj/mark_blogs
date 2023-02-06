@@ -1,8 +1,0 @@
-{% extends 'blog/base.html' %}
-
-
-{% block content %}
-    <a href="{% url 'blog:add_follow' user.id %}">Follow</a>
-    <a href="{% url 'blog:unfollow' user.id %}">Unfollow</a>
-{% endblock content %}
-    

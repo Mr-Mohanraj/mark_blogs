@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% for follow in followers %}
+    <div class="container bg-transparent m-2 p-2">
+    <p class="btn btn-info m-2 p-2"><a href="{% url 'auth:profile' follow.pk %}">{{follow.username}}</a>
+    <p class="btn btn-info m-2 p-2"><a href="{% url 'auth:profile' follow.pk %}">{{follow.email}}</a>
+    <a href="{% url 'auth:follower_profile' follow.id %}"><span class="btn btn-danger m-2 p-2">{{users.followers.count}}Followers</span></a>
+    {% comment %} <a href="{% url 'auth:following_profile' follow.id %}"><span class="btn btn-danger">{{users.folloings.count}}Following</span></a> {% endcomment %}
+
+    {% if follow in followers %}
+    <span ><a href="{% url 'auth:remove_follower' follow %}" class="btn btn-danger">Un Follow</a></span>
+    {% else%}
+    <span ><a href="{% url 'auth:add_follower' follow %}" class="btn btn-danger">Follow</a></span>
+    {% endif %}
+    </div>
+    {% comment %} <a class="brn btn-danger"href="{% url 'auth:remove_follower' follow.id %}"></a></p><br> {% endcomment %}
+    {% endfor %}
+
+{% endblock content %}

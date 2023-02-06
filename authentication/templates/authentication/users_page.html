@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% for use in users%}
+    <div class="container bg-info">
+        <a href="{% url 'auth:profile' user.id %}"><p>{{use.username}}</p></a>
+        <p class="form-control"><a class="btn btn-info" href="{% url 'auth:add_follower' use.username %}">Follow</a></p>
+        {% comment %} <form class="form-control" action="{% url 'blog:profile' user.id %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit">Follow</button>
+        </form> {% endcomment %}
+    </div>
+    {% endfor %}
+{% endblock content %}
+    

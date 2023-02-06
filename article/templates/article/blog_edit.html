@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <form action="{{post.get_absolute_url}}"method='post'>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Blog Title</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1">{{post.title}}
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Blog Body</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="50">{{post.body}}</textarea>
+        </div>
+        <button type="submit">Update</button>
+    <form>
+{% endblock content %}

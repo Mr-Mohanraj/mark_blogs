@@ -1,0 +1,23 @@
+body{
+  background-color:white !important;
+  color: black;
+}
+
+.post_title{
+  color:black;
+  padding-right:30px;
+}
+.navbar{
+  background-color:#f1f77d;
+  color:#bd7732;
+}
+.navbar-toggler{
+  background-color:#bd7732 !important;
+}
+.body_post{
+  background-color:#bd7732;
+  color:black;
+}
+.post_div{
+  background-color:#bd7732;
+}

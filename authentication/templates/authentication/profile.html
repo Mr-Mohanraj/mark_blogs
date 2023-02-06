@@ -1,0 +1,33 @@
+{% extends 'base.html'%}
+
+{% block content %}
+      <div class=" bg-secondary mt-3  pb-2 pt-1 container justify-content-center" style="width: 18rem">
+        <img src="./default.png" class="bg-danger rounded-5 card-img-top mx-auto d-block" alt="your profile images"/>
+        <div class="card-body">
+          <h5 class="card-title bg-info text-center mt-2 mb-2">{{users.username}}</h5>
+          <h5 class="card-title bg-info text-center mt-1 mb-2">{{users.email}}</h5>
+          <p class="card-text bg-info mt-1 mb-3", style="min-width:20px; min-height:50px;">
+            Here is your bio
+          </p>
+        </div>
+        {% if user.id == users.id %}
+        <ul class="list-group list-group-flush">
+          <!-- <li class="list-group-item">Follower</li>
+          <li class="list-group-item">Following</li> -->
+          <li class="list-group-item text-center mt-0 mb-2"><span class=""><a href="{% url 'blog:user_blog' user.id %}" class="card-link text-decoration-none">{{users.username}}blogs</a></span></li>
+          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:password_change' user.username%}" class="card-link text-decoration-none">Password Change</a></span></li>
+          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:password_forgot' user.username%}" class="card-link text-decoration-none">Forgot Password</a></span></li>
+          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Reset Password</a></span></li>
+          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Change Profile</a></span></li>
+          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Change Email</a></span></li>
+          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:logout' user.username %}" class="card-link text-decoration-none">Logout</a></span></li>
+        </ul>
+        {% endif %}
+        <div class="card-body mt-2 mb-2">
+          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'auth:add_follower' users.username %}" class="card-link text-decoration-none">Follow</a></span>
+
+          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'auth:follower_profile' users.id %}" class="card-link text-decoration-none">{{users.followers.count}} Follower</a></span>
+          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'auth:following_profile' users.id %}" class="card-link text-decoration-none">{{users.followings.count}} Following</a></span>
+        </div>
+      </div><hr>
+{% endblock content %}
