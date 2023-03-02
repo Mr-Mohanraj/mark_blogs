@@ -26,5 +26,5 @@ class User(AbstractUser):
 
 
 class Token(models.Model):
-    activation_token = models.CharField(max_length=64)
-    reset_token = models.CharField(max_length=64)
+    activation_token = models.CharField(max_length=500)
+    reset_token = models.CharField(max_length=500)

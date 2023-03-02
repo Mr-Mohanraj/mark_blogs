@@ -1,4 +1,5 @@
 {% load static %}
+{% load article_tags %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -14,98 +15,65 @@
     <title>Django Blog</title>
 
   </head>
-  <body>
-    <nav class="navbar navbar-expand-lg sticky-top">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'pages:home' %}">Django Blog</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'pages:home' %}">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'blog:blog_list' %}" active>Blogs</a>
-              </li>
-              {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'blog:blog_add' user.username %}" active>ADD Blog</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Profile
-                </a>
-                <ul class="dropdown-menu bg-info" aria-labelledby="navbarDropdown" style="position: absolute;">
-        <img src="./default.png" class="bg-danger rounded-5 card-img-top mx-auto d-block" alt="your profile images"/>
-        <div class="card-body">
-          <h5 class="card-title bg-info text-center mt-2 mb-2">{{user.username}}</h5>
-          <h5 class="card-title bg-info text-center mt-1 mb-2">{{user.email}}</h5>
-          <p class="card-text bg-info mt-1 mb-3", style="min-width:20px; min-height:50px;">
-            Here is your bio
-          </p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <!-- <li class="list-group-item">Follower</li>
-          <li class="list-group-item">Following</li> -->
-          <li class="list-group-item text-center mt-0 mb-2"><span class=""><a href="{% url 'blog:user_blog' user.id %}" class="card-link text-decoration-none">{{user.username}}blogs</a></span></li>
-          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:password_change' user.username%}" class="card-link text-decoration-none">Password Change</a></span></li>
-          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:password_forgot' user.username%}" class="card-link text-decoration-none">Forgot Password</a></span></li>
-          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Reset Password</a></span></li>
-          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Change Profile</a></span></li>
-          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Change Email</a></span></li>
-          <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:logout' user.username %}" class="card-link text-decoration-none">Logout</a></span></li>
-
-        </ul>
-        <div class="card-body mt-2 mb-2">
-          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'auth:follower_profile' user.id %}" class="card-link text-decoration-none">{{instance.follower.count}} Follower</a></span>
-          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'auth:following_profile' user.id %}" class="card-link text-decoration-none">{{instance.following.count}} Following</a></span>
-        </div>
-                </ul>
-              </li>
-              {% else %}
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'auth:login' %}">Login</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'auth:signup' %}">Sign up</a>
-              </li>
-              {% endif %}
-              <form class="d-flex" action="{% url 'auth:search_user' %}" method="post">
-                {% csrf_token %}
-                <input class="form-control me-2" name="q"type="search" placeholder="Username" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-              {% comment %} {% include 'blog/search_result.html' %} {% endcomment %}
-            </ul>
-          <div>
-        </div>
-    </nav>
+  <body style="background-color: red!important;">
+    <header>
+      {% include 'navbar.html' %}
+    </header>
     {% for message in messages %}
       <div class="container-fluid p-0">
         <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
-        <button type="button" class="btn btn-close btn-danger" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="True">&times;</span>
-        </button>
-        {{ message }}
+          <button type="button" class="btn btn-close btn-danger" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="True">&times;</span>
+          </button>
+          {{ message }}
+        </div>
+      </div>
+    {% endfor %}
+    <div class="d-flex flex-row">
+      <main class="h-100 w-100" style="min-height: 100vh;">
+        {% block content %}
+          
+        {% endblock content %}
+      </main>
+      {% comment %} <div></div> {% endcomment %}
+      <div  class="float-end" style="background-color:white!important;max-width: 30%;min-width: 30%;">
+        <h2>My blog</h2>
+        <p>
+          This is my blog.
+          I've written {% total_posts %} posts so far.
+        </p>
+        <p>
+          <a href="{% url 'blog:post_feed' %}">
+            Subscribe to my RSS feed
+          </a>
+        </p>
+        <h3>Latest posts</h3>
+        {% show_latest_posts 3 %}
+        <h3>Most commented posts</h3>
+        {% get_most_commented_posts as most_commented_posts %}
+        <ul>
+          {% for post in most_commented_posts %}
+            <li>
+              <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-</div>
-{% endfor %}
-    {% block content %}
-        
-    {% endblock content %}
-    <!-- Optional JavaScript; choose one of the two! -->
-    
-
-    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <footer class="bg-light">
+      <div class="container">
+        <ul class="list-unstyled">
+          <li>
+            <p>About</p>
+          </li>
+          <li>
+            Contact Me
+          </li>
+          <li>Feedback</li>
+          <li>socialmedia</li>
+        </ul>
+      </div>
+    </footer>
     <script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
-
   </body>
 </html>

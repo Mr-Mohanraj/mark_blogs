@@ -31,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+SITE_ID = 1
 
 # Application definition
 
@@ -44,7 +45,12 @@ INSTALLED_APPS = [
     'corsheaders',
     'pages',
     'authentication',
+    'user_profile',
     'article',
+    # 'django_summernote',
+    'taggit',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
 
     # # 'tailwind' setup
     # 'tailwind', # from the django-tailwind library
@@ -98,7 +104,7 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'blog.db'),
+        'NAME': os.path.join(BASE_DIR, 'blog1.db'),
     }
 }
 
@@ -165,8 +171,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-MEDIA_URL = "media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = "media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -174,8 +183,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_SUCCESS_URL = 'home'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 CSRF_TRUSTED_ORIGINS = ["http://*.railway.app","https://markblogs-production.up.railway.app"]
 

@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
-from .models import User
+from authentication.models import User
 from django.contrib import messages
 from django.http.response import Http404
 
 # def add_follower(request, pk):
 #     # follower = get_object_or_404(Follower, pk=pk)
-#     return render(request, "authentication/add_follower.html")
+#     return render(request, "user_profile/add_follower.html")
 
 
 # def add_remove_follower(request, author):
@@ -36,16 +36,16 @@ def remove_follower(request, author):
                 currentUserObj.save()
                 messages.success(request, f"un follow is  successfully!")
                 return redirect('auth:profile', pk=currentUserObj.id)
-                # return render(request, 'authentication/add_follower.html', {"users": currentUserObj, "following": followers})
+                # return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
             else:
                 messages.success(request, f"you don't follow this person this person")
-                return render(request, 'authentication/add_follower.html', {"users": currentUserObj, "following": followers})
+                return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
         else:
             messages.info(request, "This is a your profile")
-            return render(request, 'authentication/add_follower.html', {"users": currentUserObj, "following": followers})
+            return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
     else:
         messages.error(request, "please login first!")
-        return render(request, 'authentication/add_follower.html', {"users": currentUserObj, "following": followers})
+        return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
 
 
 def add_follower(request, author):
@@ -59,7 +59,7 @@ def add_follower(request, author):
         if authorObj != currentUserObj:
             if currentUserObj in followers:
                 messages.success(request, f"you are already in the followers list successfully!")
-                return render(request, 'authentication/add_follower.html', {"users": currentUserObj, "following": followers})
+                return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
             else:
                 messages.success(request, f"follow successfully!")
                 authorObj.followers.add(currentUserObj)
@@ -67,13 +67,13 @@ def add_follower(request, author):
                 authorObj.save()
                 currentUserObj.save()
                 return redirect('auth:profile', pk=currentUserObj.id)
-                # return render(request, 'authentication/add_follower.html', {"users": currentUserObj, "following": followers})
+                # return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
         else:
             messages.info(request, "Can't follow your own profile")
-            return render(request, 'authentication/add_follower.html', {"users": currentUserObj, "following": followers})
+            return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
     else:
         messages.error(request, "please login first!")
-        return render(request, 'authentication/add_follower.html', {"users": currentUserObj, "following": followers})
+        return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
 
 
 # 9
@@ -93,19 +93,19 @@ def add_follower(request, author):
 #                 messages.success(request, f"un following remove successfully!")
 #                 authorObj.followings.remove(currentUserObj)
 #                 authorObj.save()
-#                 return render(request, 'authentication/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
+#                 return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
 #             else:
 #                 messages.success(request, f"following add successfully!")
 #                 authorObj.followings.add(currentUserObj)
 #                 authorObj.save()
-#                 return render(request, 'authentication/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
+#                 return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
 #         else:
 #             messages.info(request, "you can't follow")
-#             return render(request, 'authentication/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
+#             return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
 
 #     else:
 #         messages.error(request, "please login first!")
-#         return render(request, 'authentication/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
+#         return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
 
 
 def view_follower(request, pk):
@@ -123,7 +123,7 @@ def view_follower(request, pk):
 
         if len(followers) <= 0:
             messages.error(request, "you don't have a followers")
-        return render(request, 'authentication/add_follower.html', {"users": users, "followers": followers})
+        return render(request, 'user_profile/add_follower.html', {"users": users, "followers": followers})
     except Http404:
         print("Inside the except")
         return render(request, '404.html', {"error": "User not found please login or signup"})
@@ -142,10 +142,10 @@ def view_following(request, pk):
             fun = "profile"
             messages.error(request, "you don't have a following")
 
-        return render(request, 'authentication/add_following.html', {"users": users, "following": followings, "choose": fun})
+        return render(request, 'user_profile/add_following.html', {"users": users, "following": followings, "choose": fun})
     except Http404:
         print("Inside the except")
-        return render(request, 'authentication/add_following.html', {"users": users, "following": followings, "choose": "view_following"})
+        return render(request, 'user_profile/add_following.html', {"users": users, "following": followings, "choose": "view_following"})
 
 
 # def add_following(request, pk):
@@ -158,16 +158,16 @@ def view_following(request, pk):
 #     if user.is_authenticated:
 #         if user in follow.following.all():
 #             messages.error(request, "You already following this person")
-#             return render(request, "authentication/profile.html", {"following": follow, "choose": "add_following"})
+#             return render(request, "user_profile/profile.html", {"following": follow, "choose": "add_following"})
 #         else:
 #             follow.following.add(user)
 #             follow.save()
 #             messages.success(request, "following is successfully")
-#             return render(request, "authentication/profile.html", {"following": follow, "choose": "add_following"})
+#             return render(request, "user_profile/profile.html", {"following": follow, "choose": "add_following"})
 #     else:
 #         messages.success(request, "Login please")
-#         return render(request, "authentication/profile.html", {"following": follow, "choose": "add_following"})
-#     # return render(request, "authentication/profile.html", {"instance":follow,"choose":"add_following"})
+#         return render(request, "user_profile/profile.html", {"following": follow, "choose": "add_following"})
+#     # return render(request, "user_profile/profile.html", {"instance":follow,"choose":"add_following"})
 
 
 # def remove_follower(request, pk):
@@ -179,13 +179,13 @@ def view_following(request, pk):
 #             follow.follower.remove(user)
 #             follow.save()
 #             messages.success(request, "un following is successfully")
-#             return render(request, "authentication/profile.html", {"users": users, "following": follow, "choose": "remove_follower"})
+#             return render(request, "user_profile/profile.html", {"users": users, "following": follow, "choose": "remove_follower"})
 #         else:
 #             messages.error(request, "Your not follow the person")
-#             return render(request, "authentication/profile.html", {"users": users, "following": follow, "choose": "remove_follower"})
+#             return render(request, "user_profile/profile.html", {"users": users, "following": follow, "choose": "remove_follower"})
 #     else:
 #         messages.error(request, "please login !!!")
-#         return render(request, "authentication/profile.html", {"users": users, "following": follow, "choose": "remove_follower"})
+#         return render(request, "user_profile/profile.html", {"users": users, "following": follow, "choose": "remove_follower"})
 
 
 # def remove_following(request, pk):
@@ -197,10 +197,10 @@ def view_following(request, pk):
 #             follow.following.remove(user)
 #             follow.save()
 #             messages.success(request, "Un following is successfully")
-#             return render(request, "authentication/profile.html", {"users": users, "instance": follow, "choose": "remove_following"})
+#             return render(request, "user_profile/profile.html", {"users": users, "instance": follow, "choose": "remove_following"})
 #         else:
 #             messages.success(request, "you not follow the person")
-#             return render(request, "authentication/profile.html", {"users": users, "instance": follow, "choose": "remove_following"})
+#             return render(request, "user_profile/profile.html", {"users": users, "instance": follow, "choose": "remove_following"})
 #     else:
 #         messages.error(request, "please login !!!")
-#         return render(request, "authentication/profile.html", {"users": users, "instance": follow, "choose": "remove_following"})
+#         return render(request, "user_profile/profile.html", {"users": users, "instance": follow, "choose": "remove_following"})

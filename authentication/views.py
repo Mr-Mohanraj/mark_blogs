@@ -42,7 +42,7 @@ def signup_user(request):
         url = request.build_absolute_uri('/')
         send_activation_code(user, url)
         messages.success(request, f"Activation code set your {email}")
-        return render(request, 'authentication/account_activation.html')
+        return redirect("auth:activation")
     else:
         return render(request, 'authentication/signup_form.html')
 
@@ -74,7 +74,7 @@ def login_user(request):
                     messages.error(request, "username are wrong")
                     return redirect("auth:login")
         except Exception as e:
-            return render(request, 'authentication/404.html', {"error": e})
+            return render(request, '404.html', {"error": e})
     else:
         return render(request, "authentication/login_form.html")
 
@@ -82,7 +82,7 @@ def login_user(request):
 def logout_user(request, username):
     logout(request)
     messages.success(request, "logout successfully!!")
-    return redirect('auth:home')
+    return redirect('pages:home')
 
 
 # def upload_authentication(request, user_id):
@@ -154,7 +154,7 @@ def forgot_password_change(request, token):
 def activation(request, token):
     username = generate_token(key="activation key",
                               mode='decode', token=token)['username']
-    url = request.build_absolute_uri('/')
+    # url = request.build_absolute_uri('/')
     if User.objects.filter(username=username).exists():
         user = User.objects.get(username=username)
         if not user.is_active:
@@ -170,34 +170,17 @@ def activation(request, token):
         return render(request, 'authentication/account_activation.html')
 
 
-# def profile(request, pk):
-#     user_info = get_object_or_404(User, pk=pk)
-#     return render(request, "authentication/profile.html", {"user": user_info})
+def activationPage(request):
+    return render(request, "authentication/account_activation.html")
 
 
-def search_user(request):
-    """ search function  """
-    if request.method == "POST":
-        query_name = request.POST.get('q', None)
-        print(query_name)
-        if query_name:
-            results = User.objects.filter(username__contains=query_name)
-            print("results", results)
-            return render(request, 'authentication/search_result.html', {"results": results})
-    return render(request, 'authentication/search_result.html')
-
-
-def all_users(request):
-    users = User.objects.all()
-    return render(request, "authentication/users_page.html", {"users": users})
-
-
-def profile(request, pk):
+def resendActivation(request, username):
     try:
-        print("inside the try")
-        users = get_object_or_404(User, pk=pk)
-        followers = users.followers.all()
-        return render(request, 'authentication/profile.html', {"users": users,  "followers": followers, "choose": "view_profile"})
-    except (Http404,UnboundLocalError):
-        print("Inside the except")
-        return render(request, '404.html', {"error": "User cannot find"})
+        url = request.build_absolute_uri('/')
+        user = get_object_or_404(User, username=username)
+        print(user)
+        print(request.POST)
+        send_activation_code(user,url)
+        return render(request, "authentication/account_activation.html", {'user':user})
+    except:
+        return render(request, "404.html")

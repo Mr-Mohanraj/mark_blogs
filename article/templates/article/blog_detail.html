@@ -8,8 +8,8 @@
     <div class="post_div container-lg text-start">
         <p class="post_title container-lg"><mark class="bg-success">{{post.title}}</mark></p>
         <p class='bg-info text-sm-end' style="width: fit-content; display:contents;"> Author Name <mark>{{post.author}}</mark> Create at {{post.create_at}}</p>
-        <p class="body_post"> {{post.body}}</p><br>
-        {% include 'blog/likes.html' %}
+        <p class="body_post"> {{postbody}}</p><br>
+        {% include 'article/likes.html' %}
         <form class="form-control" method="post">
             {% csrf_token %}
         <button class="btn btn-danger" type="submit" name="like" value="dislikebutton">dislike<span class="bg-info">{{post.dislikes.count}}</span></button>

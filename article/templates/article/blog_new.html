@@ -4,12 +4,13 @@
 {% block content %}
     <form method='post'>
         {% csrf_token %}
-        <label class=" container from-label">Title:
+        <label class=" container from-label ">Title:
             <input  class="form-control"name='title'><br><br>
-            <label>
+        </label>
         <label class=" container-fluid from-label">Body :
             <textarea  class="form-control pre-scrollable" name='body' cols=100 rows=10 style="height: 481px;min-height:300px"></textarea><br>
         </label><br>
         <hr>
         <button type="submit">Submit</button>
+    </form>
 {% endblock content %}

@@ -10,9 +10,12 @@
     <form method='post'>
         {% csrf_token %}
         <label class="from-lable">
-            Re-send: <button class="btn btn-success">Send</button>
+            <input type="email" placeholder="{{user.email}}">
+        </label>
+        <label class="from-lable">
+            <a href="{% url 'auth:resendA' user.username %}">Resend</a>
+            <button class="btn btn-success" value="resend" name="re-btn">ReSend</button>
         </label>
     </form>
     {% endif %}
 {% endblock content %}
-    

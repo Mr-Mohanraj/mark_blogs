@@ -1,8 +1,9 @@
 {% extends 'base.html'%}
 
 {% block content %}
+{% load static %}
       <div class=" bg-secondary mt-3  pb-2 pt-1 container justify-content-center" style="width: 18rem">
-        <img src="./default.png" class="bg-danger rounded-5 card-img-top mx-auto d-block" alt="your profile images"/>
+        <img src="{% get_media_prefix %}profile/default.png" class="bg-danger rounded-5 card-img-top mx-auto d-block" alt="your profile images"/>
         <div class="card-body">
           <h5 class="card-title bg-info text-center mt-2 mb-2">{{users.username}}</h5>
           <h5 class="card-title bg-info text-center mt-1 mb-2">{{users.email}}</h5>
@@ -24,10 +25,10 @@
         </ul>
         {% endif %}
         <div class="card-body mt-2 mb-2">
-          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'auth:add_follower' users.username %}" class="card-link text-decoration-none">Follow</a></span>
+          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'profile:add_follower' users.username %}" class="card-link text-decoration-none">Follow</a></span>
 
-          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'auth:follower_profile' users.id %}" class="card-link text-decoration-none">{{users.followers.count}} Follower</a></span>
-          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'auth:following_profile' users.id %}" class="card-link text-decoration-none">{{users.followings.count}} Following</a></span>
+          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'profile:follower_profile' users.id %}" class="card-link text-decoration-none">{{users.followers.count}} Follower</a></span>
+          <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'profile:following_profile' users.id %}" class="card-link text-decoration-none">{{users.followings.count}} Following</a></span>
         </div>
       </div><hr>
 {% endblock content %}
