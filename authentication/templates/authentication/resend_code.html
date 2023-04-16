@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method='post'>
+    {% csrf_token %}
+    <label class="from-lable">
+        <input type="email" name="email">
+    </label>
+        <button class="btn btn-success" value="resend" name="re-btn">ReSend</button>
+</form>
+
+{% endblock content %}

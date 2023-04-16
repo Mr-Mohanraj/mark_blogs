@@ -2,20 +2,10 @@
 
 
 {% block content %}
-    {%if user.is_active %}
+    {%if user.is_active and user.authenticate%}
     <p>active successfully go and login now </p>
     <a class="btn btn-success" href="{% url 'auth:login' %}">Login</a>
-    {%else%}
+    {% else %}
     <p>activation code send to your email check {{user.email}}</p>
-    <form method='post'>
-        {% csrf_token %}
-        <label class="from-lable">
-            <input type="email" placeholder="{{user.email}}">
-        </label>
-        <label class="from-lable">
-            <a href="{% url 'auth:resendA' user.username %}">Resend</a>
-            <button class="btn btn-success" value="resend" name="re-btn">ReSend</button>
-        </label>
-    </form>
     {% endif %}
 {% endblock content %}

@@ -4,13 +4,29 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-  <h1>{{ post.title }}</h1>
-  <p class="date">
-    Published {{ post.publish }} by {{ post.author }}
-  </p>
-  {{ post.body|markdown }}
+<p class="bg-danger">{{post.id}}<p>
+  <div class='container-lg d-flex justify-content-center border-info'>
+      <div class="post_div container-lg text-start">
+        <p class="date">
+          Published {{ post.publish }} by {{ post.author }}
+        </p>
+          {{ post.body|markdown }}
+          {% include 'article/likes.html' %}
+          <form class="form-control" method="post">
+              {% csrf_token %}
+          <button class="btn btn-danger" type="submit" name="like" value="dislikebutton">dislike<span class="bg-info">{{post.dislikes.count}}</span></button>
+          </form>
+  
+  {% if post.author.id == user.id %}
+  <div class="container-fluid  btn btn-group">
+      <a class="btn btn-dark" href="{% url 'blog:blog_edit' post.id %}">Edit post</a>
+      <a class="btn btn-info" href="{% url 'blog:user_blog' user.id %}">List {{user.username}} blog</a><br>
+      <a class="btn btn-danger" href="{% url 'blog:blog_delete' post.id %}">Delete</a><br>
+  </div>
+  {% endif %}
+
   <p>
-    <a href="{% url 'blog:post_share' post.id %}">
+    <a href="{% url 'blog:post_share' post.id %}" class="btn-info">
       Share this post
     </a>
   </p>
@@ -29,8 +45,9 @@
       {{ total_comments }} comment{{ total_comments|pluralize }}
     </h2>
   {% endwith %}
+
   {% for comment in comments %}
-    <div class="comment">
+    <div class="comment bg-white ">
       <p class="info">
         Comment {{ forloop.counter }} by {{ comment.name }}
         {{ comment.created }}
@@ -41,4 +58,6 @@
     <p>There are no comments yet.</p>
   {% endfor %}
   {% include "article/post/includes/comment_form.html" %}
+</div>
+</div>
 {% endblock %}

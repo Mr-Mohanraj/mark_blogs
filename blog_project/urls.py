@@ -11,7 +11,6 @@ urlpatterns = [
     path('', include('authentication.urls', namespace='auth')),
     path('', include('user_profile.urls', namespace="profile")),
     path('article/',include('article.urls', namespace="blog")),
-    # path('summernote/', include('django_summernote.urls')),
 ]
 
 if settings.DEBUG:

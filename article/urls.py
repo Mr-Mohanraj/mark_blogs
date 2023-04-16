@@ -18,7 +18,6 @@ urlpatterns = [
     path('<int:post_id>/comment/',
          views.post_comment, name='post_comment'),
     path('feed/', LatestPostsFeed(), name='post_feed'),
-    path('search/', views.post_search, name='post_search'),
     path('<int:user_id>/blogs/', views.user_blog, name='user_blog'),
     path('<int:pk>/likes/', views.add_likes, name="likes"),
 #     path('blog/', views.BlogList.as_view(), name='blog_list'),

@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <form method='post' > 
     {% csrf_token %}
@@ -20,5 +19,7 @@
         <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password_confirm" required>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+
+
+
 {% endblock content %}

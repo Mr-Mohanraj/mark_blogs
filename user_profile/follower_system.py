@@ -3,23 +3,7 @@ from authentication.models import User
 from django.contrib import messages
 from django.http.response import Http404
 
-# def add_follower(request, pk):
-#     # follower = get_object_or_404(Follower, pk=pk)
-#     return render(request, "user_profile/add_follower.html")
 
-
-# def add_remove_follower(request, author):
-#     authorObj = Follower.objects.get(username=author)
-#     currentUserObj = User.objects.get(username=request.user.username)
-#     following = authorObj.following.all()
-#     if request.user.is_authenticated:
-#         if author != currentUserObj.username:
-#             if currentUserObj in following:
-#                 authorObj.following.remove(currentUserObj.id)
-#             else:
-#                 authorObj.following.add(currentUserObj.id)
-#     else:
-#         return "somthhig"
 def remove_follower(request, author):
     # who is go to follow author person
     currentUserObj = User.objects.get(username=request.user.username)
@@ -35,10 +19,11 @@ def remove_follower(request, author):
                 authorObj.save()
                 currentUserObj.save()
                 messages.success(request, f"un follow is  successfully!")
-                return redirect('auth:profile', pk=currentUserObj.id)
+                return redirect('profile:profile', pk=currentUserObj.id)
                 # return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
             else:
-                messages.success(request, f"you don't follow this person this person")
+                messages.success(
+                    request, f"you don't follow this person this person")
                 return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
         else:
             messages.info(request, "This is a your profile")
@@ -58,7 +43,8 @@ def add_follower(request, author):
     if currentUserObj.is_authenticated:
         if authorObj != currentUserObj:
             if currentUserObj in followers:
-                messages.success(request, f"you are already in the followers list successfully!")
+                messages.success(
+                    request, f"you are already in the followers list successfully!")
                 return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
             else:
                 messages.success(request, f"follow successfully!")
@@ -66,7 +52,7 @@ def add_follower(request, author):
                 currentUserObj.followings.add(authorObj)
                 authorObj.save()
                 currentUserObj.save()
-                return redirect('auth:profile', pk=currentUserObj.id)
+                return redirect('profile:profile', pk=currentUserObj.id)
                 # return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
         else:
             messages.info(request, "Can't follow your own profile")
@@ -74,38 +60,6 @@ def add_follower(request, author):
     else:
         messages.error(request, "please login first!")
         return render(request, 'user_profile/add_follower.html', {"users": currentUserObj, "following": followers})
-
-
-# 9
-
-# def add_remove_following(request, author):
-#     is_followed = False
-#     # who is go to follow author person
-#     currentUserObj = User.objects.get(username=request.user.username)
-#     authorObj = User.objects.get(
-#         username=author)  # who is want a follow person
-#     # for getting all follower belong to the author person
-#     followings = authorObj.followings.all()
-
-#     if currentUserObj.is_authenticated:
-#         if authorObj != currentUserObj:
-#             if currentUserObj in followings:
-#                 messages.success(request, f"un following remove successfully!")
-#                 authorObj.followings.remove(currentUserObj)
-#                 authorObj.save()
-#                 return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
-#             else:
-#                 messages.success(request, f"following add successfully!")
-#                 authorObj.followings.add(currentUserObj)
-#                 authorObj.save()
-#                 return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
-#         else:
-#             messages.info(request, "you can't follow")
-#             return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
-
-#     else:
-#         messages.error(request, "please login first!")
-#         return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
 
 
 def view_follower(request, pk):
@@ -204,3 +158,54 @@ def view_following(request, pk):
 #     else:
 #         messages.error(request, "please login !!!")
 #         return render(request, "user_profile/profile.html", {"users": users, "instance": follow, "choose": "remove_following"})
+
+
+# 9
+
+# def add_remove_following(request, author):
+#     is_followed = False
+#     # who is go to follow author person
+#     currentUserObj = User.objects.get(username=request.user.username)
+#     authorObj = User.objects.get(
+#         username=author)  # who is want a follow person
+#     # for getting all follower belong to the author person
+#     followings = authorObj.followings.all()
+
+#     if currentUserObj.is_authenticated:
+#         if authorObj != currentUserObj:
+#             if currentUserObj in followings:
+#                 messages.success(request, f"un following remove successfully!")
+#                 authorObj.followings.remove(currentUserObj)
+#                 authorObj.save()
+#                 return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
+#             else:
+#                 messages.success(request, f"following add successfully!")
+#                 authorObj.followings.add(currentUserObj)
+#                 authorObj.save()
+#                 return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
+#         else:
+#             messages.info(request, "you can't follow")
+#             return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
+
+#     else:
+#         messages.error(request, "please login first!")
+#         return render(request, 'user_profile/add_following.html', {"users": currentUserObj, "following": followings, "choose": "view_following"})
+
+
+# def add_follower(request, pk):
+#     # follower = get_object_or_404(Follower, pk=pk)
+#     return render(request, "user_profile/add_follower.html")
+
+
+# def add_remove_follower(request, author):
+#     authorObj = Follower.objects.get(username=author)
+#     currentUserObj = User.objects.get(username=request.user.username)
+#     following = authorObj.following.all()
+#     if request.user.is_authenticated:
+#         if author != currentUserObj.username:
+#             if currentUserObj in following:
+#                 authorObj.following.remove(currentUserObj.id)
+#             else:
+#                 authorObj.following.add(currentUserObj.id)
+#     else:
+#         return "somthhig"

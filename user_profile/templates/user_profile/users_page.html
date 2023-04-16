@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% for use in users%}
+    <div class="container bg-info">
+        <a href="{% url 'profile:profile' use.id %}"><p>{{use.username}}</p></a>
+        <p class="form-control"><a class="btn btn-info" href="{% url 'profile:add_follower' use.username %}">Follow</a></p>
+    </div>
+    {% endfor %}
+{% endblock content %}
+    

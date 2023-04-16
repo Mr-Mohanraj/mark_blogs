@@ -3,9 +3,9 @@ from .models import Post, Comment
 from django.core.paginator import Paginator, EmptyPage, \
                                   PageNotAnInteger
 from django.views.generic import ListView
-from django.contrib.postgres.search import SearchVector, \
-                                           SearchQuery, SearchRank
-from django.contrib.postgres.search import TrigramSimilarity
+#from django.contrib.postgres.search import SearchVector, \
+ #                                          SearchQuery, SearchRank
+#from django.contrib.postgres.search import TrigramSimilarity
 from .forms import EmailPostForm, CommentForm, SearchForm
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
@@ -51,6 +51,18 @@ def post_detail(request, year, month, day, post):
                              publish__year=year,
                              publish__month=month,
                              publish__day=day)
+        # List of active comments for this post
+    comments = post.comments.filter(active=True)
+    # Form for users to comment
+    form = CommentForm()
+
+    # List of similar posts
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids)\
+                                  .exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags'))\
+                                .order_by('-same_tags','-publish')[:4]
+
     
     if request.method == "POST":
         result = _checker(request.POST)
@@ -66,19 +78,7 @@ def post_detail(request, year, month, day, post):
                    'comments': comments,
                    'form': form,
                    'similar_posts': similar_posts,
-                   "instance": obj})
-    # List of active comments for this post
-    comments = post.comments.filter(active=True)
-    # Form for users to comment
-    form = CommentForm()
-
-    # List of similar posts
-    post_tags_ids = post.tags.values_list('id', flat=True)
-    similar_posts = Post.published.filter(tags__in=post_tags_ids)\
-                                  .exclude(id=post.id)
-    similar_posts = similar_posts.annotate(same_tags=Count('tags'))\
-                                .order_by('-same_tags','-publish')[:4]
-
+                   "instance": post})
     return render(request,
                   'article/post/detail.html',
                   {'post': post,
@@ -146,25 +146,6 @@ def post_comment(request, post_id):
                             'comment': comment})
 
 
-def post_search(request):
-    form = SearchForm()
-    query = None
-    results = []
-
-    if 'query' in request.GET:
-        form = SearchForm(request.GET)
-        if form.is_valid():
-            query = form.cleaned_data['query']
-            results = Post.published.annotate(
-                similarity=TrigramSimilarity('title', query),
-            ).filter(similarity__gt=0.1).order_by('-similarity')
-
-    return render(request,
-                  'article/post/search.html',
-                  {'form': form,
-                   'query': query,
-                   'results': results})
-
 def blog_edit(request, pk):
     if request.method == 'POST':
         try:
@@ -172,7 +153,7 @@ def blog_edit(request, pk):
             post.title = request.POST['title']
             post.body = request.POST['body']
             post.save()
-            return render(request, 'article/blog_detail.html', {"post": post})
+            return render(request, 'article/post/detail.html', {"post": post})
         except ObjectDoesNotExist:
             return render(request, '404.html', {"error": ObjectDoesNotExist})
     else:
@@ -234,7 +215,7 @@ Image	![alt text](image.jpg)
 def user_blog(request, user_id):
     try:
         posts = get_list_or_404(Post, author=user_id)
-        return render(request, 'article/blog_list.html', {"posts": posts})
+        return render(request, 'article/post/list.html', {"posts": posts})
     except Http404:
         messages.error(
             request, "There is no article now add it use the add new article button")

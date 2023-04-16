@@ -85,15 +85,6 @@ def logout_user(request, username):
     return redirect('pages:home')
 
 
-# def upload_authentication(request, user_id):
-#     title = request.POST['title']
-#     body = request.POST['body']
-#     post = get_object_or_404(Post, authenticationor=user_id)
-#     post.title = title
-#     post.body = body
-#     post.save()
-
-
 def password_change(request, username):
     user = get_object_or_404(User, username=username)
     if request.method == 'POST':
@@ -113,7 +104,7 @@ def password_change(request, username):
                 return redirect('auth:password_change')
         else:
             messages.error(request, "old Password are not match")
-            return redirect('auth:password_change')
+            return redirect('auth:password_change', kwargs={"username":username})
     else:
         return render(request, 'authentication/password_change.html')
 
@@ -126,7 +117,7 @@ def password_forgot(request, username):
         password_forgot_mail(request, username, email, token)
         messages.success(
             request, f"SEND forgot email link to your {email}")
-        return redirect('auth:home')
+        return redirect('pages:home')
     else:
         return render(request, 'authentication/password_forgot.html', {"password_forgot": True})
 
@@ -184,3 +175,17 @@ def resendActivation(request, username):
         return render(request, "authentication/account_activation.html", {'user':user})
     except:
         return render(request, "404.html")
+
+
+def resend_code(request):
+    if not (request.method == "GET"):
+        try:
+            email = request.POST['email']
+            user = get_object_or_404(User,email=email)
+            url = request.build_absolute_uri('/')
+            send_activation_code(user, url)
+            return redirect("auth:activation")
+        except Http404:
+            return render(request, "404.html", {"msg":"check your email address otherwise please retry signup"})
+    return render(request, "authentication/resend_code.html")
+

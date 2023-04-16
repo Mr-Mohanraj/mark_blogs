@@ -31,18 +31,12 @@
         </p>
     </div>
         <ul class="list-group list-group-flush">
-        <!-- <li class="list-group-item">Follower</li>
-        <li class="list-group-item">Following</li> -->
-        <li class="list-group-item text-center mt-0 mb-2"><span class=""><a href="{% url 'blog:user_blog' user.id %}" class="card-link text-decoration-none">{{user.username}}blogs</a></span></li>
-        <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:password_change' user.username%}" class="card-link text-decoration-none">Password Change</a></span></li>
-        <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:password_forgot' user.username%}" class="card-link text-decoration-none">Forgot Password</a></span></li>
-        <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Reset Password</a></span></li>
-        <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Change Profile</a></span></li>
-        <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="#" class="card-link text-decoration-none">Change Email</a></span></li>
-        <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:logout' user.username %}" class="card-link text-decoration-none">Logout</a></span></li>
-
+            <li class="list-group-item text-center mt-0 mb-2"><span class=""><a href="{% url 'blog:user_blog' user.id %}" class="card-link text-decoration-none">{{users.username}}blogs</a></span></li>
+            <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:password_change' user.username%}" class="card-link text-decoration-none">Password Change</a></span></li>
+            <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:password_forgot' user.username%}" class="card-link text-decoration-none">Forgot Password</a></span></li>
+            <li class="list-group-item text-center mt-2 mb-2"><span class=""><a href="{% url 'auth:logout' user.username %}" class="card-link text-decoration-none">Logout</a></span></li>
         </ul>
-        <div class="card-body mt-2 mb-2">
+        <div class="card-body mt-2 mb-2" style="display:grid;">
             <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'profile:follower_profile' user.id %}" class="card-link text-decoration-none">{{instance.follower.count}} Follower</a></span>
             <span class="text-center mt-0 mb-2 ms-4 img-thumbnail"><a href="{% url 'profile:following_profile' user.id %}" class="card-link text-decoration-none">{{instance.following.count}} Following</a></span>
         </div>
@@ -59,9 +53,9 @@
             {% comment %} {% include 'blog/search_result.html' %} {% endcomment %}
         </ul>
         <div class="nav-item">
-            <form class="d-flex justify-content-end" action="{% url 'profile:search_user' %}" method="post">
+            <form class="d-flex justify-content-end" action="{% url 'profile:search_user' %}" method="get">
                 {% csrf_token %}
-                <input class="form-control me-2" name="q"type="search" placeholder="Username" aria-label="Search">
+                <input class="form-control me-2" name="q" type="search" placeholder="Username" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>

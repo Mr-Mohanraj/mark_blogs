@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -43,13 +43,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'pages',
+    # 'django.contrib.sites', # must
+    # 'allauth', # must
+    # 'allauth.account', # must
+    # 'allauth.socialaccount', # must
+    # 'allauth.socialaccount.providers.google', # new
     'authentication',
+    'pages',
     'user_profile',
     'article',
     # 'django_summernote',
     'taggit',
-    'django.contrib.sites',
     'django.contrib.sitemaps',
 
     # # 'tailwind' setup
@@ -61,16 +65,25 @@ INSTALLED_APPS = [
 # TAILWIND_APP_NAME = 'theme'
 # # after this run the commend following 'python manage.py tailwind install' for all required dependency to install
 
+# AUTHENTICATION_BACKENDS = [
+#     # Needed to login by username in Django admin, regardless of `allauth`
+#     'django.contrib.auth.backends.ModelBackend',
 
+#     # `allauth` specific authentication methods, such as login by e-mail
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+   # 'social_django.middleware.SocialAuthExceptionMiddleware',
+
 ]
 
 AUTH_USER_MODEL = 'authentication.User'
@@ -90,6 +103,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+               # 'social_django.context_processors.backends',
+
             ],
         },
     },
@@ -170,6 +185,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # MEDIA_URL = "media/"
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -184,6 +204,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_SUCCESS_URL = 'home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.console.EmailBackend'
 
 CSRF_TRUSTED_ORIGINS = ["http://*.railway.app","https://markblogs-production.up.railway.app"]
 
@@ -197,4 +218,10 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get("host_mail")
 EMAIL_HOST_PASSWORD  = os.environ.get("host_mail_password")
 
+LOGIN_URL = 'auth:signup'
+LOGIN_REDIRECT_URL = 'pages:home'
+LOGOUT_URL = 'auth:logout'
+LOGOUT_REDIRECT_URL = 'pages:home'
+#SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ""
+#SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ""
 # print(os.system("ls"))
