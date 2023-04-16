@@ -119,7 +119,7 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'blog1.db'),
+        'NAME': os.path.join(BASE_DIR, 'blog.db'),
     }
 }
 
